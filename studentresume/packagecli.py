@@ -2,6 +2,8 @@ from json import loads
 from sys import argv
 import re
 
+import os.path
+
 try:
     from json_validator import is_valid_resume
     from resume import Resume
@@ -11,6 +13,7 @@ except ImportError:
 
 
 def get_file(file):
+    file = os.path.join(os.path.dirname(__file__), file)
     try:
         with open(file, encoding="utf8") as f:
             data = f.read()

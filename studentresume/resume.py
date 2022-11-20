@@ -13,6 +13,7 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Frame, PageTemplate
 from reportlab.platypus.flowables import Spacer
 
+import os.path
 
 class Resume:
     
@@ -30,8 +31,8 @@ class Resume:
 
     def register_fonts(self):
         # register fonts to be used throughout the document.
-        registerFont(TTFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["font"]))
-        registerFont(TTFont(self.theme["fonts"]["fontBoldName"], self.theme["fonts"]["fontBold"]))
+        registerFont(TTFont(self.theme["fonts"]["fontName"], os.path.join(os.path.dirname(__file__), self.theme["fonts"]["font"])))
+        registerFont(TTFont(self.theme["fonts"]["fontBoldName"], os.path.join(os.path.dirname(__file__), self.theme["fonts"]["fontBold"])))
         registerFontFamily(self.theme["fonts"]["fontName"], normal= self.theme["fonts"]["fontName"] , bold=self.theme["fonts"]["fontBoldName"])
         
     def generate_pdf(self, data, contact):
@@ -469,14 +470,14 @@ class Resume:
     
     #this is mostly for testing purposes
     def get_default_theme(self):
-        file = "themes/default.json"
+        file = os.path.join(os.path.dirname(__file__), "themes/default.json")
         with open(file, encoding="utf8") as f:
             data = f.read()
         self.theme = loads(data)
     
     def load_required(self):
         #loads required fields from required.json to be used by required_fields_worker method
-        file = "requiredFields.json"
+        file = os.path.join(os.path.dirname(__file__), "requiredFields.json")
         with open(file, encoding="utf8") as f:
             data = f.read()
         self.required = loads(data)

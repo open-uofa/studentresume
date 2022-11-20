@@ -17,6 +17,7 @@ setup(
                                     'sample.resume.json',
                                     'schema.json',
                                     'testonepage.resume.json',
+                                    'themes/*',
                                     'fonts/*',]},
     include_package_data=True,
     classifiers=[
