@@ -5,8 +5,9 @@ setup(
     version='0.1.0',    
     description='Student Resume Generator Python package',
     url='https://github.com/open-uofa/studentresume',
-    author='Diana',
-    author_email='dble@ualberta.ca',
+    author='Diana, Ivan, Curtis, Yijing, Jason, Mohammed',
+    author_email='dble@ualberta.ca, yzhang24@ualberta.ca, jrobock@ualberta.ca, ckennedy@ualberta.ca, qu8@ualberta.ca, alzafara@ualberta.ca',
+    license='MIT License',
     license='MIT License',
     packages=['studentresume'],
     install_requires=[
