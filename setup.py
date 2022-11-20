@@ -1,5 +1,5 @@
 from setuptools import setup
- 
+
 setup(
     name='studentresume',
     version='0.1.0',    
@@ -13,7 +13,13 @@ setup(
                     'jsonschema==4.16.0',
                     'reportlab==3.6.11',         
                     ],
-
+    package_data={'studentresume': ['requiredFields.json', 
+                                    'sample.resume.json',
+                                    'schema.json',
+                                    'testonepage.resume.json',
+                                    'themes/*',
+                                    'fonts/*',]},
+    include_package_data=True,
     classifiers=[
         'Development Status :: 1 - Planning',
         'License :: OSI Approved :: MIT License',  
