@@ -1,0 +1,40 @@
+{
+    "basics":{
+        "required": "True",
+        "fields": ["name", "email", "phone", "summary", "location", "profiles"],
+        "location": {
+            "required": "True",
+            "fields": ["city", "countryCode", "region"]
+        },
+        "profiles": {
+            "required": "False"
+    }},
+    "work": {
+        "required": "False",
+        "fields": ["name", "location", "position", "startDate", "endDate", "summary", "highlights"]
+    },
+    "volunteer": {
+        "required": "False",
+        "fields": ["organization",  "startDate", "endDate", "summary", "highlights"]
+    },
+    "education": {
+        "required": "True",
+        "fields": ["institution", "area", "studyType", "startDate", "endDate"]
+    },
+    "skills": {
+        "required": "True",
+        "fields": ["name", "level", "keywords"]
+    },
+    "projects": {
+        "required": "False",
+        "fields": ["name", "description", "highlights"]
+    },
+    "awards": {
+        "required": "False",
+        "fields": ["title", "date", "awarder", "summary"]
+    },
+    "publications": {
+        "required": "False",
+        "fields": ["name", "publisher", "releaseDate", "url", "summary"]
+    }
+}

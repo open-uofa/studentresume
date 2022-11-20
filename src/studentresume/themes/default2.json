@@ -1,0 +1,68 @@
+{
+    "fonts":{
+        "font": "fonts/Helvetica.ttf",
+        "fontSize": 8,
+        "fontBold": "fonts/Helvetica-Bold.ttf",
+        "fontName": "Helvetica",
+        "fontBoldName": "Helvetica Bold",
+        "fontFamily": "Helvetica",
+        "fontColor": "#189404",
+        "titleFontSize": 16
+
+    },
+    "paragraph": { "name": "Content",
+                "spaceAfter": 0.1
+    },
+    "page": {
+        "height" : 11,
+        "width" : 8.5,
+        "margin": [0.5, 0.7, 0.4, 0.4],
+        "pageSize": "letter",
+        "styles": "Normal"
+
+    },
+    "tableStyles":{
+        "valign": "TOP",
+        "align": "LEFT",
+        "colWidths": [0.85, 6.9]
+    },
+    "ordering":{
+        "body": [
+            "summary",
+            "education",
+            "skills",
+            "experience",
+            "projects",
+            "volunteer",
+            "awards",
+            "publications"
+        ]
+    },
+    "head":{
+        "leftTop": false,
+        "leftBot": false,
+        "rightTop": false,
+        "centerBot": "information",
+        "centerTop": "name",
+        "rightBot": false
+
+    },
+    "headAln": {
+        "leftTop": [0.4, 0.4],
+        "leftBot": [0.4, 0.6],
+        "rightTop": [0.4, 0.4],
+        "centerBot": [2.0, 0.6],
+        "centerTop": [2.0, 0.4],
+        "rightBot": [0.4, 0.6]
+    },
+    "headTitle": {
+        "leftTop": false,
+        "leftBot": false,
+        "rightTop": false,
+        "centerBot": false,
+        "centerTop": true,
+        "rightBot": false
+    },
+    "headLine": [0.4, 0.47, 0.4, 0.47],
+    "multiCol": false
+}
