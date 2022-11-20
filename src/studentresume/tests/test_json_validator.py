@@ -1,4 +1,4 @@
-from ..json_validator import is_valid_resume
+from studentresume.json_validator import is_valid_resume
 
 def test_is_valid_resume():
     

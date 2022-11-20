@@ -3,7 +3,7 @@ from json import loads
 
 import pytest
 
-from ..resume import *
+from studentresume.resume import *
 
 """
     Test each function that retrives information to confirm that the list returned the correct data and format.
