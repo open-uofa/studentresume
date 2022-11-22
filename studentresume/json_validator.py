@@ -27,7 +27,7 @@ def is_valid_resume(json_string: str) -> bool:
     Returns True if the json_string is a valid json resume as defined
     in the schema file, False otherwise.
     """
-    schema_file = os.path.join(os.path.dirname(__file__), 'schema.json')
+    schema_file = os.path.join(os.path.dirname(__file__), "schema.json")
     with open(schema_file, encoding="utf8") as f:
         schema = json.load(f)
 

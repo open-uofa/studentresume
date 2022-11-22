@@ -470,14 +470,16 @@ class Resume:
     
     #this is mostly for testing purposes
     def get_default_theme(self):
-        file = os.path.join(os.path.dirname(__file__), "themes/default.json")
+        dir_name = os.path.join(os.path.dirname(__file__), 'themes')
+        file = os.path.join(dir_name, 'default.json')
         with open(file, encoding="utf8") as f:
             data = f.read()
         self.theme = loads(data)
     
     def load_required(self):
         #loads required fields from required.json to be used by required_fields_worker method
-        file = os.path.join(os.path.dirname(__file__), "requiredFields.json")
+        file = "requiredFields.json"
+        file = os.path.join(os.path.dirname(__file__), file)
         with open(file, encoding="utf8") as f:
             data = f.read()
         self.required = loads(data)
