@@ -8,7 +8,6 @@ setup(
     author='Diana, Ivan, Curtis, Yijing, Jason, Mohammed',
     author_email='dble@ualberta.ca, yzhang24@ualberta.ca, jrobock@ualberta.ca, ckennedy@ualberta.ca, qu8@ualberta.ca, alzafara@ualberta.ca',
     license='MIT License',
-    license='MIT License',
     packages=['studentresume'],
     install_requires=[
                     'jsonschema==4.16.0',
