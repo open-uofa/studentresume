@@ -10,7 +10,7 @@ from reportlab.pdfbase import pdfdoc
 from reportlab.pdfbase.pdfmetrics import registerFont, registerFontFamily
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Frame, PageTemplate, Image
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Frame, PageTemplate
 from reportlab.platypus.flowables import Spacer
 
 import os.path
@@ -477,18 +477,23 @@ class Resume:
         tblData = [order[x] for x in self.theme["ordering"]["body"] if order[x] != None]
         return self.generate_pdf(tblData, contact)
 
-    def apply_theme(self, theme_json):
-        #sets up paragraph styles
-        self.theme = theme_json
-        self.register_fonts()
-        self.height = theme_json["page"]["height"] * inch
-        self.width = theme_json["page"]["width"] * inch
+    #used to dyamically adjust the size of the pdf to attempt to fit page
+    def addstyles(self):
         self.styles.add(ParagraphStyle(name='Content',
                             fontFamily=self.theme["fonts"]["fontFamily"],
                             fontSize=self.theme["fonts"]["fontSize"],
                             spaceAfter=self.theme["paragraph"]["spaceAfter"]*inch,
                             leftIndent=0,
                             rightIndent=0))
+        
+    def apply_theme(self, theme_json):
+        #sets up paragraph styles
+        self.theme = theme_json
+        self.register_fonts()
+        self.height = theme_json["page"]["height"] * inch
+        self.width = theme_json["page"]["width"] * inch
+        self.addstyles()
+        
 
     
     #this is mostly for testing purposes
