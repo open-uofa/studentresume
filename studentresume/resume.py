@@ -286,11 +286,12 @@ class Resume:
     # THIS ISNT MUCH BETTER
     # NESTED MESS
     def required_fields(self, resume_json):
-        if not self.required_fields_worker(resume_json):
-            raise Exception("Required fields cannot be empty! Please check the resume.json file and fix")
+        error = self.required_fields_worker(resume_json)
+        if not error:
+            raise Exception("%s is required and cannot be empty! Please check the resume.json file and fix", error)
         return True
     
-    def required_fields_worker(self, resume_json) -> bool:
+    def required_fields_worker(self, resume_json):
         """summary: Check if the required fields are empty
 
         Args:
@@ -301,12 +302,12 @@ class Resume:
         """
         for field in self.required.keys():
             if self.required[field]["required"] == "True" and field not in resume_json.keys():
-                return False
+                return field
             if field not in resume_json.keys(): # if the field is not in the resume json and is not required we skip it
                 continue
             if self.required[field]["required"] == "True" or len(resume_json[field]) > 0:
                 if type(resume_json[field]) == list and len(resume_json[field]) == 0:
-                    return False
+                    return field
                 elif type(resume_json[field]) == dict:
                     for item in self.required[field]["fields"]:
                         if item not in resume_json[field].keys():
@@ -314,14 +315,14 @@ class Resume:
                         if type(resume_json[field][item]) == dict:
                             for subitem in self.required[field][item]['fields']: #loop for subfields like profiles
                                 if resume_json[field][item][subitem] == "":
-                                    return False
+                                    return field + " " + item
                         elif resume_json[field][item] == "":
-                            return False
+                            return field + " " + item
                 elif type(resume_json[field]) == list:
                     for i in range(len(resume_json[field])):
                         for item in self.required[field]["fields"]:
                             if type(resume_json[field][i][item]) == list and len(resume_json[field][i][item]) == 0:
-                                return False
+                                return field + " " + item
                             elif resume_json[field][i][item] == "":
                                 return False
         return True
@@ -434,7 +435,26 @@ class Resume:
                 if len(resume_json["publications"][i]["summary"]) > 100:
                     raise Exception("Publications summary is too long! Please shorten it to make it fit on two page")
         return True
-          
+    
+    def centered_style(self, resume_json, contact):
+        if contact["website"] == "":
+            key = [k for k, v in self.theme["head"].items() if v == 'website'][0]
+            self.theme["head"][key] = False
+        holder = contact["website"].split(" ")
+        if len(holder) > 2 and contact["website"] != "":
+            holder = contact["website"].split(" ")
+            holder[0] = holder[0] + "<br />\n"
+            contact["website"] = " ".join(holder)
+        contact['information'] = [contact['email'], contact['address'], contact['phone'], contact['website']]
+        contact["information"].pop() if contact["website"] == "" else contact["information"]
+        contact["information"] = " - ".join(contact["information"])
+        c = canvas.Canvas("resume.pdf")
+        textobject = c.beginText()
+        textobject.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"])
+        textobject.textLines(contact["information"])
+        contact["information"] = textobject
+         
+         
     def generate_resume(self, resume_json):
         self.required_fields(resume_json)
         self.one_page(resume_json) if self.page == 1 else None
@@ -447,12 +467,7 @@ class Resume:
             'phone': resume_json["basics"]["phone"]
             }
         contact['address'] = resume_json["basics"]["location"]['city']  + " " + resume_json["basics"]["location"]['region']+", " + resume_json["basics"]["location"]['countryCode']
-        contact['information'] = [contact['email'], contact['address'], contact['phone'], contact['website']]
-        contact["information"].pop() if contact["website"] == "" else contact["information"]
-        contact["information"] = "   -   ".join(contact["information"])
-        if contact["website"] == "":
-            key = [k for k, v in self.theme["head"].items() if v == 'website'][0]
-            self.theme["head"][key] = False
+        self.centered_style(resume_json, contact)
         data = {
             'summary': resume_json["basics"]["summary"]}
         #adds item into data
