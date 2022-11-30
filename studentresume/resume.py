@@ -181,8 +181,7 @@ class Resume:
             projects.append("<b>"+"Techonology Used"+"</b>"+": "+", ".join(item["keywords"]))
             projects.append("<b>Highlights: </b><br/>- "+"<br/>- ".join(item["highlights"]))
             
-            projects_list.append("<br/>".join(projects))
-            
+            projects_list.append("<br/>".join(projects))    
         return projects_list
 
     def process_work_experience(self, resume_json):
