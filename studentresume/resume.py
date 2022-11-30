@@ -1,3 +1,4 @@
+import datetime
 from io import BytesIO
 from json import loads
 
@@ -10,10 +11,11 @@ from reportlab.pdfbase import pdfdoc
 from reportlab.pdfbase.pdfmetrics import registerFont, registerFontFamily
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Frame, PageTemplate, Image
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Frame, PageTemplate
 from reportlab.platypus.flowables import Spacer
 
 import os.path
+
 
 class Resume:
     
@@ -117,7 +119,6 @@ class Resume:
                 self.height - (self.theme["headAln"]["rightBot"][1] * inch),
                 contact[self.theme["head"]["rightBot"]]) if self.theme["head"]["rightBot"] else None
             canvas.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"]) if self.theme["headTitle"]["rightBot"] else None 
-            
             canvas.setFont(self.theme["fonts"]["fontBoldName"], self.theme["fonts"]["titleFontSize"])  if self.theme["headTitle"]["centerTop"] else None 
             canvas.drawCentredString(
                 self.width / self.theme["headAln"]["centerTop"][0],
@@ -128,6 +129,30 @@ class Resume:
             canvas.restoreState()
         return myPage
         
+    def date_format_start(self, resume_json, start_date):
+        for item in resume_json:
+            start_date_month_num = str(datetime.datetime.strptime(start_date, '%Y-%m-%d').month)
+            start_date_Month = datetime.datetime.strptime(str(start_date_month_num), '%m').strftime('%B')
+            start_date_Year = str(datetime.datetime.strptime(start_date, '%Y-%m-%d').year)
+            start_Date = start_date_Month + ", " + start_date_Year
+        return start_Date
+    
+    def date_format_end(self, resume_json, end_date):  
+        for item in resume_json:
+            end_date_month_num = str(datetime.datetime.strptime(end_date, '%Y-%m-%d').month)
+            end_date_Month = datetime.datetime.strptime(str(end_date_month_num), '%m').strftime('%B')
+            end_date_Year = str(datetime.datetime.strptime(end_date, '%Y-%m-%d').year)
+            end_Date = end_date_Month + ", " + end_date_Year
+        return end_Date
+    
+    # current_date_Month  = datetime.date.today().strftime("%B")
+            
+            # current_date_Year  = datetime.date.today().strftime("%Y")
+            
+            # if end_date_month_num == current_date_Month:
+            #     if end_date_Year == current_date_Year:
+            #         end_Date = "Present"
+            #     else:
 
     def process_education(self, resume_json):
         """Summary: Process the education section of the resume json
@@ -142,7 +167,10 @@ class Resume:
         for item in resume_json["education"]:
             education_list.append("<b>"+item["institution"]+"</b>")
             education_list.append("<b>" + item["studyType"]+"</b> "+item["area"])
-            education_list.append("<b>Dates: </b>" + item["startDate"] + " through " + item["endDate"])
+            
+            start_Date = self.date_format_start(resume_json["education"], item["startDate"])
+            end_Date = self.date_format_end(resume_json["education"], item["endDate"])
+            education_list.append("<b>Dates: </b>" + start_Date + " - " + end_Date)
             
             if "score" in item.keys() and item["score"] != "": #or check if empty string
                 education_list.append("<b>GPA:</b> "+item["score"])
@@ -176,8 +204,11 @@ class Resume:
         projects_list = []
         for item in resume_json["projects"]: 
             projects = []
-            projects.append("<b>"+item["name"]+"</b>"+": "+item["description"]+ " - "+"<b>"+item["endDate"]+"</b>")
-            projects.append("<a href="+item["url"]+">"+item["url"]+"</a>")  
+            
+            end_Date = self.date_format_end(resume_json["projects"], item["endDate"])
+            projects.append("<b>"+item["name"]+"</b>"+": "+item["description"]+ " - "+"<b>"+end_Date+"</b>")
+            
+            projects.append(item["url"])  
             projects.append("<b>"+"Techonology Used"+"</b>"+": "+", ".join(item["keywords"]))
             projects.append("<b>Highlights: </b><br/>- "+"<br/>- ".join(item["highlights"]))
             
@@ -198,7 +229,11 @@ class Resume:
         for item in resume_json["work"]: 
             work = []
             work.append("<b>"+item["name"]+"</b>"+":" + " - "+item["location"])
-            work.append("<b>"+item["position"]+"</b>"+": "+item["startDate"]+" through "+item["endDate"])
+            
+            start_Date = self.date_format_start(resume_json["work"], item["startDate"])
+            end_Date = self.date_format_end(resume_json["work"], item["endDate"])
+            work.append("<b>"+item["position"]+"</b>"+": "+start_Date+" - "+end_Date)
+            
             work.append(item["summary"])
             if item["highlights"] != [""]:
                 work.append("<b>Highlights: </b><br/>- "+"<br/>- ".join(item["highlights"]))
@@ -217,7 +252,11 @@ class Resume:
         experience_list = []
         for item in resume_json["volunteer"]: 
             vol = []
-            vol.append("<b>"+item["organization"]+"</b> "+item["startDate"]+" through "+item["endDate"])
+            
+            start_Date = self.date_format_start(resume_json["volunteer"], item["startDate"])
+            end_Date = self.date_format_end(resume_json["volunteer"], item["endDate"])
+            vol.append("<b>"+item["organization"]+"</b> "+start_Date+" - "+end_Date)
+            
             vol.append(item["summary"])
             if item["highlights"] != [""]:
                 vol.append("<b>Highlights: </b><br/>- "+"<br/>- ".join(item["highlights"]))
@@ -237,7 +276,10 @@ class Resume:
         for item in resume_json["awards"]:
             award = [] 
             award.append("<b>"+item["title"]+"</b>")
-            award.append("Awarded by: "+item["awarder"]+" - "+item["date"])
+            
+            date = self.date_format_start(resume_json["awards"], item["date"])
+            award.append("Awarded by: "+item["awarder"]+" - "+date)
+            
             award.append(item["summary"])
             awards_list.append("<br/>".join(award))
         return awards_list
@@ -255,34 +297,14 @@ class Resume:
         for item in resume_json["publications"]:
             publication = [] 
             publication.append("<b>"+item["name"]+"</b>")
-            publication.append(item["publisher"]+" - "+item["releaseDate"])
-            publication.append("<a href="+item["url"]+">"+item["url"]+"</a>")
+            
+            date = self.date_format_start(resume_json["publications"], item["releaseDate"])
+            publication.append(item["publisher"]+" - "+date)
+            
+            publication.append(item["url"])
             publication.append(item["summary"])
             publications_list.append("<br/>".join(publication))
         return publications_list
-    
-    def process_profiles(self, resume_json):
-        """summary: Process the profiles section of the resume json
-
-        Args:
-            resume_json (json): the resume json
-
-        Returns:
-            list: A list of profiles objects
-        """
-        profiles_list = []
-        if resume_json["basics"]["url"] != "":
-            profiles_list.append(resume_json["basics"]["url"])
-        for item in resume_json["basics"]["profiles"]:
-            if item["network"].lower() == "github" or item["network"].lower() == "git":
-                profiles_list.append(chr(0xeba1)+" :"+item["username"])
-            if item["network"].lower() == "linkedin":
-                profiles_list.append(chr(0xf08c)+" :"+item["username"])
-            if item["network"].lower() == "stackoverflow":
-                profiles_list.append(chr(0xf16c)+" :"+item["username"])
-        if len(profiles_list) == 0:
-            return ""
-        return " ".join(profiles_list)
     
     # THIS ISNT MUCH BETTER
     # NESTED MESS
@@ -381,69 +403,69 @@ class Resume:
                 if len(resume_json["publications"][i]["summary"]) > 100:
                     raise Exception("Publications summary is too long! Please shorten it to make it fit on one page")
         return True
-    def two_page(self, resume_json):
-        if len(resume_json["basics"]["summary"]) > 1300:
-            raise Exception("Summary is too long! Please shorten it to make it fit on two page")
-        if len(resume_json["education"]) > 3:
-            raise Exception("Too many education entries! Please shorten it to 2 or less to make it fit on two page")
-        if len(resume_json["skills"]) > 3:
-            raise Exception("You have more than two skills entries! Please remove all but two to make it fit on two page")
-        if len(resume_json["work"]) > 3:
-            raise Exception("You have more than two work entries! Please remove all but two to make it fit on two page")
-        else:
-            if len(resume_json["work"]) <= 3:
-                for i in range(len(resume_json["work"])):
-                    if len(resume_json["work"][i]["summary"]) > 250:
-                        raise Exception("Work summary is too long! Please shorten it to make it fit on two page")
-                    if len(resume_json["work"][i]["highlights"]) > 4:
-                        raise Exception("You have more than four work highlights! Please remove all but four to make it fit on two page")
-                    else:
-                        if len(resume_json["work"][i]["highlights"]) <= 4:
-                            for j in range(len(resume_json["work"][i]["highlights"])):
-                                if len(resume_json["work"][i]["highlights"][j]) > 100:
-                                    raise Exception("Work highlight is too long! Please shorten it to make it fit on two page")
-        if len(resume_json["projects"]) > 4:
-            raise Exception("You have more than two projects entries! Please remove all but two to make it fit on two page")
-        else:
-            if len(resume_json["projects"]) <= 4:
-                for i in range(len(resume_json["projects"])):
-                    if len(resume_json["projects"][i]["description"]) > 90:
-                        raise Exception("Project summary is too long! Please shorten it to make it fit on two page")
-                    if len(resume_json["projects"][i]["highlights"]) > 4:
-                        raise Exception("You have more than four project highlights! Please remove all but four to make it fit on two page")
-                    else:
-                        if len(resume_json["projects"][i]["highlights"]) <= 4:
-                            for j in range(len(resume_json["projects"][i]["highlights"])):
-                                if len(resume_json["projects"][i]["highlights"][j]) > 100:
-                                    raise Exception("Project highlight is too long! Please shorten it to make it fit on two page")
-        if len(resume_json["volunteer"]) > 2:
-            raise Exception("You have more than two volunteer entries! Please remove all but two to make it fit on two page")
-        else:
-            for i in range(len(resume_json["volunteer"])):
-                if len(resume_json["volunteer"][i]["summary"]) > 100:
-                    raise Exception("Volunteer summary is too long! Please shorten it to make it fit on two page")
-        if len(resume_json["awards"]) > 2:
-            raise Exception("You have more than two awards entries! Please remove all but two to make it fit on two page")
-        else:
-            for i in range(len(resume_json["awards"])):
-                if len(resume_json["awards"][i]["summary"]) > 100:
-                    raise Exception("Awards summary is too long! Please shorten it to make it fit on two page")
-        if len(resume_json["publications"]) > 2:
-            raise Exception("You have more than two publications entries! Please remove all but two to make it fit on two page")
-        else:
-            for i in range(len(resume_json["publications"])): 
-                if len(resume_json["publications"][i]["summary"]) > 100:
-                    raise Exception("Publications summary is too long! Please shorten it to make it fit on two page")
-        return True
+    # def two_page(self, resume_json):
+    #     if len(resume_json["basics"]["summary"]) > 1300:
+    #         raise Exception("Summary is too long! Please shorten it to make it fit on two page")
+    #     if len(resume_json["education"]) > 3:
+    #         raise Exception("Too many education entries! Please shorten it to 2 or less to make it fit on two page")
+    #     if len(resume_json["skills"]) > 3:
+    #         raise Exception("You have more than two skills entries! Please remove all but two to make it fit on two page")
+    #     if len(resume_json["work"]) > 3:
+    #         raise Exception("You have more than two work entries! Please remove all but two to make it fit on two page")
+    #     else:
+    #         if len(resume_json["work"]) <= 3:
+    #             for i in range(len(resume_json["work"])):
+    #                 if len(resume_json["work"][i]["summary"]) > 250:
+    #                     raise Exception("Work summary is too long! Please shorten it to make it fit on two page")
+    #                 if len(resume_json["work"][i]["highlights"]) > 4:
+    #                     raise Exception("You have more than four work highlights! Please remove all but four to make it fit on two page")
+    #                 else:
+    #                     if len(resume_json["work"][i]["highlights"]) <= 4:
+    #                         for j in range(len(resume_json["work"][i]["highlights"])):
+    #                             if len(resume_json["work"][i]["highlights"][j]) > 100:
+    #                                 raise Exception("Work highlight is too long! Please shorten it to make it fit on two page")
+    #     if len(resume_json["projects"]) > 4:
+    #         raise Exception("You have more than two projects entries! Please remove all but two to make it fit on two page")
+    #     else:
+    #         if len(resume_json["projects"]) <= 4:
+    #             for i in range(len(resume_json["projects"])):
+    #                 if len(resume_json["projects"][i]["description"]) > 90:
+    #                     raise Exception("Project summary is too long! Please shorten it to make it fit on two page")
+    #                 if len(resume_json["projects"][i]["highlights"]) > 4:
+    #                     raise Exception("You have more than four project highlights! Please remove all but four to make it fit on two page")
+    #                 else:
+    #                     if len(resume_json["projects"][i]["highlights"]) <= 4:
+    #                         for j in range(len(resume_json["projects"][i]["highlights"])):
+    #                             if len(resume_json["projects"][i]["highlights"][j]) > 100:
+    #                                 raise Exception("Project highlight is too long! Please shorten it to make it fit on two page")
+    #     if len(resume_json["volunteer"]) > 2:
+    #         raise Exception("You have more than two volunteer entries! Please remove all but two to make it fit on two page")
+    #     else:
+    #         for i in range(len(resume_json["volunteer"])):
+    #             if len(resume_json["volunteer"][i]["summary"]) > 100:
+    #                 raise Exception("Volunteer summary is too long! Please shorten it to make it fit on two page")
+    #     if len(resume_json["awards"]) > 2:
+    #         raise Exception("You have more than two awards entries! Please remove all but two to make it fit on two page")
+    #     else:
+    #         for i in range(len(resume_json["awards"])):
+    #             if len(resume_json["awards"][i]["summary"]) > 100:
+    #                 raise Exception("Awards summary is too long! Please shorten it to make it fit on two page")
+    #     if len(resume_json["publications"]) > 2:
+    #         raise Exception("You have more than two publications entries! Please remove all but two to make it fit on two page")
+    #     else:
+    #         for i in range(len(resume_json["publications"])): 
+    #             if len(resume_json["publications"][i]["summary"]) > 100:
+    #                 raise Exception("Publications summary is too long! Please shorten it to make it fit on two page")
+    #     return True
           
     def generate_resume(self, resume_json):
         self.required_fields(resume_json)
         self.one_page(resume_json) if self.page == 1 else None
-        self.two_page(resume_json) if self.page == 2 else None
+        # self.two_page(resume_json) if self.page == 2 else None
         order = {}
         contact = {
             'name': resume_json["basics"]["name"],
-            'website': self.process_profiles(resume_json), #what assumtions do we want to make a but website? 
+            'website': resume_json["basics"]["url"], #what assumtions do we want to make a but website? 
             'email': resume_json["basics"]["email"],
             'phone': resume_json["basics"]["phone"]
             }
