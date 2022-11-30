@@ -10,7 +10,7 @@ from reportlab.pdfbase import pdfdoc
 from reportlab.pdfbase.pdfmetrics import registerFont, registerFontFamily
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Frame, PageTemplate
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Frame, PageTemplate, Image
 from reportlab.platypus.flowables import Spacer
 
 import os.path
@@ -177,7 +177,7 @@ class Resume:
         for item in resume_json["projects"]: 
             projects = []
             projects.append("<b>"+item["name"]+"</b>"+": "+item["description"]+ " - "+"<b>"+item["endDate"]+"</b>")
-            projects.append(item["url"])  
+            projects.append("<a href="+item["url"]+">"+item["url"]+"</a>")  
             projects.append("<b>"+"Techonology Used"+"</b>"+": "+", ".join(item["keywords"]))
             projects.append("<b>Highlights: </b><br/>- "+"<br/>- ".join(item["highlights"]))
             
@@ -256,10 +256,33 @@ class Resume:
             publication = [] 
             publication.append("<b>"+item["name"]+"</b>")
             publication.append(item["publisher"]+" - "+item["releaseDate"])
-            publication.append(item["url"])
+            publication.append("<a href="+item["url"]+">"+item["url"]+"</a>")
             publication.append(item["summary"])
             publications_list.append("<br/>".join(publication))
         return publications_list
+    
+    def process_profiles(self, resume_json):
+        """summary: Process the profiles section of the resume json
+
+        Args:
+            resume_json (json): the resume json
+
+        Returns:
+            list: A list of profiles objects
+        """
+        profiles_list = []
+        if resume_json["basics"]["url"] != "":
+            profiles_list.append(resume_json["basics"]["url"])
+        for item in resume_json["basics"]["profiles"]:
+            if item["network"].lower() == "github" or item["network"].lower() == "git":
+                profiles_list.append(chr(0xeba1)+" :"+item["username"])
+            if item["network"].lower() == "linkedin":
+                profiles_list.append(chr(0xf08c)+" :"+item["username"])
+            if item["network"].lower() == "stackoverflow":
+                profiles_list.append(chr(0xf16c)+" :"+item["username"])
+        if len(profiles_list) == 0:
+            return ""
+        return " ".join(profiles_list)
     
     # THIS ISNT MUCH BETTER
     # NESTED MESS
@@ -420,7 +443,7 @@ class Resume:
         order = {}
         contact = {
             'name': resume_json["basics"]["name"],
-            'website': resume_json["basics"]["url"], #what assumtions do we want to make a but website? 
+            'website': self.process_profiles(resume_json), #what assumtions do we want to make a but website? 
             'email': resume_json["basics"]["email"],
             'phone': resume_json["basics"]["phone"]
             }

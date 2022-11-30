@@ -1,0 +1,344 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "fonts": {
+      "type": "object",
+      "properties": {
+        "font": {
+          "type": "string"
+        },
+        "fontSize": {
+          "type": "integer"
+        },
+        "fontBold": {
+          "type": "string"
+        },
+        "fontItalic": {
+          "type": "string"
+        },
+        "fontName": {
+          "type": "string"
+        },
+        "fontBoldName": {
+          "type": "string"
+        },
+        "fontItalicName": {
+          "type": "string"
+        },
+        "fontFamily": {
+          "type": "string"
+        },
+        "fontColor": {
+          "type": "string"
+        },
+        "titleFontSize": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "font",
+        "fontSize",
+        "fontBold",
+        "fontName",
+        "fontBoldName",
+        "fontFamily",
+        "fontColor",
+        "titleFontSize"
+      ]
+    },
+    "paragraph": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "spaceAfter": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "spaceAfter"
+      ]
+    },
+    "page": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "number"
+        },
+        "margin": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "pageSize": {
+          "type": "string"
+        },
+        "styles": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "height",
+        "width",
+        "margin",
+        "pageSize",
+        "styles"
+      ]
+    },
+    "tableStyles": {
+      "type": "object",
+      "properties": {
+        "valign": {
+          "type": "string"
+        },
+        "align": {
+          "type": "string"
+        },
+        "colWidths": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "required": [
+        "valign",
+        "align",
+        "colWidths"
+      ]
+    },
+    "ordering": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "body"
+      ]
+    },
+    "head": {
+      "type": "object",
+      "properties": {
+        "leftTop": {
+          "type": ["string", "boolean"]
+        },
+        "leftBot": {
+          "type": ["string", "boolean"]
+        },
+        "rightTop": {
+          "type": ["string", "boolean"]
+        },
+        "centerBot": {
+          "type": ["string", "boolean"]
+        },
+        "centerTop": {
+          "type": ["string", "boolean"]
+        },
+        "rightBot": {
+          "type": ["string", "boolean"]
+        }
+      },
+      "required": [
+        "leftTop",
+        "leftBot",
+        "rightTop",
+        "centerBot",
+        "centerTop",
+        "rightBot"
+      ]
+    },
+    "headAln": {
+      "type": "object",
+      "properties": {
+        "leftTop": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "leftBot": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "rightTop": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "centerBot": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "centerTop": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "rightBot": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "required": [
+        "leftTop",
+        "leftBot",
+        "rightTop",
+        "centerBot",
+        "centerTop",
+        "rightBot"
+      ]
+    },
+    "headTitle": {
+      "type": "object",
+      "properties": {
+        "leftTop": {
+          "type": "boolean"
+        },
+        "leftBot": {
+          "type": "boolean"
+        },
+        "rightTop": {
+          "type": "boolean"
+        },
+        "centerBot": {
+          "type": "boolean"
+        },
+        "centerTop": {
+          "type": "boolean"
+        },
+        "rightBot": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "leftTop",
+        "leftBot",
+        "rightTop",
+        "centerBot",
+        "centerTop",
+        "rightBot"
+      ]
+    },
+    "headLine": {
+      "type": "array",
+      "items": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ]
+    },
+    "multiCol": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "fonts",
+    "paragraph",
+    "page",
+    "tableStyles",
+    "ordering",
+    "head",
+    "headAln",
+    "headTitle",
+    "headLine",
+    "multiCol"
+  ]
+}

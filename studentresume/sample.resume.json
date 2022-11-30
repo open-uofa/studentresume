@@ -17,14 +17,19 @@
     },
     "profiles": [
       {
-        "network": "Twitter",
+        "network": "Github",
         "username": "neutralthoughts",
         "url": "http://twitter.com/neutralthoughts"
       },
       {
-        "network": "SoundCloud",
+        "network": "LinkedIn",
         "username": "dandymusicnl",
         "url": "https://soundcloud.example.com/dandymusicnl"
+      },
+      {
+        "network": "Stackoverflow",
+        "username": "RichyHendy",
+        "url": "https://stackoverflow.com/users/1234567/richyhendy"
       }
     ]
   },

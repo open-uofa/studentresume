@@ -1,8 +1,8 @@
 {
     "fonts":{
-        "font": "fonts/Inconsolata-Regular.ttf",
+        "font": "fonts/Inconsolata-Regular-Nerd.ttf",
         "fontSize": 8,
-        "fontBold": "fonts/Inconsolata-Bold.ttf",
+        "fontBold": "fonts/Inconsolata-Bold-Nerd.ttf",
         "fontItalic": "fonts/Inconsolata-Italic.ttf",
         "fontName": "Inconsolata",
         "fontBoldName": "InconsolataBold",

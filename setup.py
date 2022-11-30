@@ -10,8 +10,8 @@ setup(
     license='MIT License',
     packages=['studentresume'],
     install_requires=[
-                    'jsonschema==4.16.0',
-                    'reportlab==3.6.11',         
+                    'jsonschema==4.17.3',
+                    'reportlab==3.6.12',         
                     ],
     package_data={'studentresume': ['requiredFields.json', 
                                     'sample.resume.json',
