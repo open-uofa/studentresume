@@ -33,9 +33,9 @@ def main():
     if "--page=1" in argv:
         page = 1
         argv.pop(argv.index("--page=1"))
-    elif "--page=2" in argv:
-        page = 2
-        argv.pop(argv.index("--page=2"))
+    # elif "--page=2" in argv:
+    #     page = 2
+    #     argv.pop(argv.index("--page=2"))
     regex = re.compile(r'--page=\d')
     bad = [i for i in argv if regex.search(i)]
     if len(bad) > 0:
