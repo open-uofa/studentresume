@@ -294,7 +294,6 @@ class Resume:
     # NESTED MESS
     def required_fields(self, resume_json):
         error = self.required_fields_worker(resume_json)
-        print(error)
         if error != True:
             raise Exception(f"{error} is required and cannot be empty! Please check the resume.json file and fix")
         return True

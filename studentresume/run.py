@@ -45,7 +45,7 @@ def main(resume_json: Path = typer.Argument(None, help="Path to resume JSON file
          theme_json: Optional[Path] = typer.Argument(None, help="Path to JSON theme file"),
          theme: Optional[str] = typer.Option("modern", "--theme", "-t", 
                                              help="default theme name (modern, twocol, centered", 
-                                             callback=theme_callback, autocompletion=complete_theme),
+                                             callback=theme_callback, shell_complete=complete_theme),
          onepage: bool = typer.Option(False, help="enforce single page resume")):
     if resume_json is None:
         raise typer.BadParameter("Requires a resume JSON file as an argument")
@@ -58,13 +58,14 @@ def main(resume_json: Path = typer.Argument(None, help="Path to resume JSON file
         raise typer.BadParameter("Invalid JSON")
     print("[bold green]Valid JSON[/bold green]")
     resume = Resume(False)
-    if theme == "modern":
+    if theme == "modern" and theme_json == None:
         resume.apply_theme(loads(get_file(os.path.join("themes", "default.json"))))
     elif theme == "twocol":
         resume.apply_theme(loads(get_file(os.path.join("themes", "default3.json"))))
     elif theme == "centered":
         resume.apply_theme(loads(get_file(os.path.join("themes", "default2.json")))) 
     elif theme_json != None:
+        theme = "custom theme!"
         resume.apply_theme(loads(theme_json.read_text()))
     print("[bold green]restricting to one page[/bold green]") if onepage else None
     resume.set_page(1 if onepage else None)   
