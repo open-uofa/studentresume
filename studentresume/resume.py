@@ -294,8 +294,8 @@ class Resume:
     # NESTED MESS
     def required_fields(self, resume_json):
         error = self.required_fields_worker(resume_json)
-        if not error:
-            raise Exception("%s is required and cannot be empty! Please check the resume.json file and fix", error)
+        if error != True:
+            raise Exception(f"{error} is required and cannot be empty! Please check the resume.json file and fix")
         return True
     
     def required_fields_worker(self, resume_json):
@@ -322,16 +322,16 @@ class Resume:
                         if type(resume_json[field][item]) == dict:
                             for subitem in self.required[field][item]['fields']: #loop for subfields like profiles
                                 if resume_json[field][item][subitem] == "":
-                                    return field + " " + item
+                                    return field + "/" + item
                         elif resume_json[field][item] == "":
-                            return field + " " + item
+                            return field + "/" + item
                 elif type(resume_json[field]) == list:
                     for i in range(len(resume_json[field])):
                         for item in self.required[field]["fields"]:
                             if type(resume_json[field][i][item]) == list and len(resume_json[field][i][item]) == 0:
-                                return field + " " + item
+                                return field + "/" + item
                             elif resume_json[field][i][item] == "":
-                                return False
+                                return field + "/" + item
         return True
     
     def one_page(self, resume_json):
