@@ -9,10 +9,10 @@ import os.path
 import typer
 
 try:
-    from json_validator import is_valid_resume
+    from json_validator import is_valid_resume, is_valid_theme
     from resume import Resume
 except ImportError:
-    from .json_validator import is_valid_resume
+    from .json_validator import is_valid_resume, is_valid_theme
     from .resume import Resume
 
 
@@ -66,6 +66,8 @@ def main(resume_json: Path = typer.Argument(None, help="Path to resume JSON file
         resume.apply_theme(loads(get_file(os.path.join("themes", "default2.json")))) 
     elif theme_json != None:
         theme = "custom theme!"
+        if not is_valid_theme(theme_json.read_text()):
+            raise typer.BadParameter("Invalid theme JSON")
         resume.apply_theme(loads(theme_json.read_text()))
     print("[bold green]restricting to one page[/bold green]") if onepage else None
     resume.set_page(1 if onepage else None)   
