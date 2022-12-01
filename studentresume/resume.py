@@ -124,6 +124,13 @@ class Resume:
                 self.height - (self.theme["headAln"]["centerTop"][1] * inch),
                 contact[self.theme["head"]["centerTop"]]) if self.theme["head"]["centerTop"] else None
             canvas.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"]) if self.theme["headTitle"]["centerTop"] else None 
+            
+            canvas.setFont(self.theme["fonts"]["fontBoldName"], self.theme["fonts"]["titleFontSize"])  if self.theme["headTitle"]["center2Bot"] else None 
+            canvas.drawCentredString(
+                self.width / self.theme["headAln"]["center2Bot"][0],
+                self.height - (self.theme["headAln"]["center2Bot"][1] * inch),
+                contact[self.theme["head"]["center2Bot"]]) if self.theme["head"]["center2Bot"] else None
+            canvas.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"]) if self.theme["headTitle"]["center2Bot"] else None 
             # restore the state to what it was when saved
             canvas.restoreState()
         return myPage
@@ -274,11 +281,11 @@ class Resume:
             profiles_list.append(resume_json["basics"]["url"])
         for item in resume_json["basics"]["profiles"]:
             if item["network"].lower() == "github" or item["network"].lower() == "git":
-                profiles_list.append(chr(0xeba1)+" :"+item["username"])
+                profiles_list.append(chr(0xeba1)+" :"+item["username"]) if self.theme["nerd"] else profiles_list.append("Github: "+item["username"])
             if item["network"].lower() == "linkedin":
-                profiles_list.append(chr(0xf08c)+" :"+item["username"])
+                profiles_list.append(chr(0xf08c)+" :"+item["username"]) if self.theme["nerd"] else profiles_list.append("LinkedIn: "+item["username"])
             if item["network"].lower() == "stackoverflow":
-                profiles_list.append(chr(0xf16c)+" :"+item["username"])
+                profiles_list.append(chr(0xf16c)+" :"+item["username"]) if self.theme["nerd"] else profiles_list.append("Stack Overflow: "+item["username"])
         if len(profiles_list) == 0:
             return ""
         return " ".join(profiles_list)
@@ -441,18 +448,16 @@ class Resume:
             key = [k for k, v in self.theme["head"].items() if v == 'website'][0]
             self.theme["head"][key] = False
         holder = contact["website"].split(" ")
-        if len(holder) > 2 and contact["website"] != "":
+        if len(holder) > 2 and contact["website"] != "" and "information" in self.theme["head"].values(): #if profiles exist and we are using information
             holder = contact["website"].split(" ")
-            holder[0] = holder[0] + "<br />\n"
-            contact["website"] = " ".join(holder)
+            contact["website"] = holder[0]
+            holder.pop(0)
+            contact["profiles"] = " ".join(holder)
+            self.theme["head"]["center2Bot"] = 'profiles'
+            
         contact['information'] = [contact['email'], contact['address'], contact['phone'], contact['website']]
         contact["information"].pop() if contact["website"] == "" else contact["information"]
         contact["information"] = " - ".join(contact["information"])
-        c = canvas.Canvas("resume.pdf")
-        textobject = c.beginText()
-        textobject.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"])
-        textobject.textLines(contact["information"])
-        contact["information"] = textobject
          
          
     def generate_resume(self, resume_json):
