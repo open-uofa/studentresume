@@ -1,4 +1,3 @@
-import datetime
 from io import BytesIO
 from json import loads
 
@@ -15,6 +14,8 @@ from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, 
 from reportlab.platypus.flowables import Spacer
 
 import os.path
+
+import datetime
 
 
 class Resume:
@@ -130,30 +131,68 @@ class Resume:
         return myPage
         
     def date_format_start(self, resume_json, start_date):
-        for item in resume_json:
-            start_date_month_num = str(datetime.datetime.strptime(start_date, '%Y-%m-%d').month)
-            start_date_Month = datetime.datetime.strptime(str(start_date_month_num), '%m').strftime('%B')
-            start_date_Year = str(datetime.datetime.strptime(start_date, '%Y-%m-%d').year)
-            start_Date = start_date_Month + ", " + start_date_Year
+        """Summary: Process the date portion of each section of the resume json
+
+        Args:
+            resume_json (json): The resume json
+            start_date (string): The start date of the section
+
+        Returns:
+            string: The formatted start date
+        """
+        start_date_month_num = str(datetime.datetime.strptime(start_date, '%Y-%m-%d').month)
+        start_date_Month = datetime.datetime.strptime(str(start_date_month_num), '%m').strftime('%B')
+        start_date_Year = str(datetime.datetime.strptime(start_date, '%Y-%m-%d').year)
+        start_Date = start_date_Month + ", " + start_date_Year
         return start_Date
     
-    def date_format_end(self, resume_json, end_date):  
-        for item in resume_json:
+    def date_format_end(self, resume_json, end_date): 
+        """Summary: Process the date portion of each section of the resume json that is not projects, work or volunteer
+
+        Args:
+            resume_json (json): The resume json
+            start_date (string): The end date of the section
+
+        Returns:
+            string: The formatted end date
+        """ 
+        end_date_month_num = str(datetime.datetime.strptime(end_date, '%Y-%m-%d').month)
+        end_date_Month = datetime.datetime.strptime(str(end_date_month_num), '%m').strftime('%B')
+        end_date_Year = str(datetime.datetime.strptime(end_date, '%Y-%m-%d').year)
+        end_Date = end_date_Month + ", " + end_date_Year
+        return end_Date
+    
+    def date_format_current(self, resume_json, end_date):
+        """Summary: Process the date portion of each section of the resume json that is projects, work or volunteer
+
+        Args:
+            resume_json (json): The resume json
+            start_date (string): The end date of the section
+
+        Returns:
+            string: The formatted end date
+        """ 
+        current_date_Day  = datetime.date.today().day
+        current_date_Month  = datetime.date.today().month
+        current_date_Year  = datetime.date.today().year
+        
+        end_date_Day = datetime.datetime.strptime(end_date, '%Y-%m-%d').day
+        end_date_Month = datetime.datetime.strptime(end_date, '%Y-%m-%d').month
+        end_date_Year = datetime.datetime.strptime(end_date, '%Y-%m-%d').year
+        
+        if end_date_Year > current_date_Year: 
+            end_Date = "Current"  
+        elif (end_date_Year == current_date_Year) and (end_date_Month > current_date_Month):
+            end_Date = "Current"
+        elif (end_date_Year == current_date_Year) and (end_date_Month == current_date_Month) and (end_date_Day > current_date_Day):
+            end_Date = "Current"
+        else:
             end_date_month_num = str(datetime.datetime.strptime(end_date, '%Y-%m-%d').month)
             end_date_Month = datetime.datetime.strptime(str(end_date_month_num), '%m').strftime('%B')
             end_date_Year = str(datetime.datetime.strptime(end_date, '%Y-%m-%d').year)
             end_Date = end_date_Month + ", " + end_date_Year
         return end_Date
-    
-    # current_date_Month  = datetime.date.today().strftime("%B")
             
-            # current_date_Year  = datetime.date.today().strftime("%Y")
-            
-            # if end_date_month_num == current_date_Month:
-            #     if end_date_Year == current_date_Year:
-            #         end_Date = "Present"
-            #     else:
-
     def process_education(self, resume_json):
         """Summary: Process the education section of the resume json
 
@@ -205,7 +244,7 @@ class Resume:
         for item in resume_json["projects"]: 
             projects = []
             
-            end_Date = self.date_format_end(resume_json["projects"], item["endDate"])
+            end_Date = self.date_format_current(resume_json["projects"], item["endDate"])
             projects.append("<b>"+item["name"]+"</b>"+": "+item["description"]+ " - "+"<b>"+end_Date+"</b>")
             
             projects.append(item["url"])  
@@ -231,7 +270,7 @@ class Resume:
             work.append("<b>"+item["name"]+"</b>"+":" + " - "+item["location"])
             
             start_Date = self.date_format_start(resume_json["work"], item["startDate"])
-            end_Date = self.date_format_end(resume_json["work"], item["endDate"])
+            end_Date = self.date_format_current(resume_json["work"], item["endDate"])
             work.append("<b>"+item["position"]+"</b>"+": "+start_Date+" - "+end_Date)
             
             work.append(item["summary"])
@@ -254,7 +293,7 @@ class Resume:
             vol = []
             
             start_Date = self.date_format_start(resume_json["volunteer"], item["startDate"])
-            end_Date = self.date_format_end(resume_json["volunteer"], item["endDate"])
+            end_Date = self.date_format_current(resume_json["volunteer"], item["endDate"])
             vol.append("<b>"+item["organization"]+"</b> "+start_Date+" - "+end_Date)
             
             vol.append(item["summary"])
@@ -403,6 +442,7 @@ class Resume:
                 if len(resume_json["publications"][i]["summary"]) > 100:
                     raise Exception("Publications summary is too long! Please shorten it to make it fit on one page")
         return True
+    
     # def two_page(self, resume_json):
     #     if len(resume_json["basics"]["summary"]) > 1300:
     #         raise Exception("Summary is too long! Please shorten it to make it fit on two page")
@@ -498,6 +538,16 @@ class Resume:
         #orders table based on order in theme.json
         tblData = [order[x] for x in self.theme["ordering"]["body"] if order[x] != None]
         return self.generate_pdf(tblData, contact)
+    
+    def apply_styles(self):
+        self.styles.add(ParagraphStyle(name='Content',
+                            fontFamily=self.theme["fonts"]["fontFamily"],
+                            fontSize=self.theme["fonts"]["fontSize"],
+                            spaceAfter=self.theme["paragraph"]["spaceAfter"]*inch,
+                            leftIndent=0,
+                            rightIndent=0))
+        
+    # fontSize = fontSize - 1   
 
     def apply_theme(self, theme_json):
         #sets up paragraph styles
@@ -505,14 +555,8 @@ class Resume:
         self.register_fonts()
         self.height = theme_json["page"]["height"] * inch
         self.width = theme_json["page"]["width"] * inch
-        self.styles.add(ParagraphStyle(name='Content',
-                            fontFamily=self.theme["fonts"]["fontFamily"],
-                            fontSize=self.theme["fonts"]["fontSize"],
-                            spaceAfter=self.theme["paragraph"]["spaceAfter"]*inch,
-                            leftIndent=0,
-                            rightIndent=0))
-
-    
+        self.apply_styles()
+        
     #this is mostly for testing purposes
     def get_default_theme(self):
         dir_name = os.path.join(os.path.dirname(__file__), 'themes')
