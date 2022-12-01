@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 from json import loads
 from rich import print
 from typing import Optional
@@ -32,10 +35,17 @@ def theme_callback(value: str):
         raise typer.BadParameter(f"{value} is not a supported default theme")
     return value
 
+#not sure if I did this right autocomplete isnt working for me
+def complete_theme():
+    return ["modern", "twocol", "centered"]
+
+
 @app.command()
 def main(resume_json: Path = typer.Argument(None, help="Path to resume JSON file"), 
          theme_json: Optional[Path] = typer.Argument(None, help="Path to JSON theme file"),
-         theme: Optional[str] = typer.Option("modern", "--theme", "-t", help="default theme name (modern, twocol, centered", callback=theme_callback),
+         theme: Optional[str] = typer.Option("modern", "--theme", "-t", 
+                                             help="default theme name (modern, twocol, centered", 
+                                             callback=theme_callback, autocompletion=complete_theme),
          onepage: bool = typer.Option(False, help="enforce single page resume")):
     if resume_json is None:
         raise typer.BadParameter("Requires a resume JSON file as an argument")
