@@ -120,12 +120,20 @@ class Resume:
                 self.height - (self.theme["headAln"]["rightBot"][1] * inch),
                 contact[self.theme["head"]["rightBot"]]) if self.theme["head"]["rightBot"] else None
             canvas.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"]) if self.theme["headTitle"]["rightBot"] else None 
+            
             canvas.setFont(self.theme["fonts"]["fontBoldName"], self.theme["fonts"]["titleFontSize"])  if self.theme["headTitle"]["centerTop"] else None 
             canvas.drawCentredString(
                 self.width / self.theme["headAln"]["centerTop"][0],
                 self.height - (self.theme["headAln"]["centerTop"][1] * inch),
                 contact[self.theme["head"]["centerTop"]]) if self.theme["head"]["centerTop"] else None
             canvas.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"]) if self.theme["headTitle"]["centerTop"] else None 
+            
+            canvas.setFont(self.theme["fonts"]["fontBoldName"], self.theme["fonts"]["titleFontSize"])  if self.theme["headTitle"]["center2Bot"] else None 
+            canvas.drawCentredString(
+                self.width / self.theme["headAln"]["center2Bot"][0],
+                self.height - (self.theme["headAln"]["center2Bot"][1] * inch),
+                contact[self.theme["head"]["center2Bot"]]) if self.theme["head"]["center2Bot"] else None
+            canvas.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"]) if self.theme["headTitle"]["center2Bot"] else None 
             # restore the state to what it was when saved
             canvas.restoreState()
         return myPage
@@ -228,13 +236,11 @@ class Resume:
             
             end_Date = self.date_format_current(item["endDate"])
             projects.append("<b>"+item["name"]+"</b>"+": "+item["description"]+ " - "+"<b>"+end_Date+"</b>")
-            
-            projects.append(item["url"])  
+            projects.append("<a href="+item["url"]+">"+item["url"]+"</a>")
             projects.append("<b>"+"Techonology Used"+"</b>"+": "+", ".join(item["keywords"]))
             projects.append("<b>Highlights: </b><br/>- "+"<br/>- ".join(item["highlights"]))
             
-            projects_list.append("<br/>".join(projects))
-            
+            projects_list.append("<br/>".join(projects))    
         return projects_list
 
     def process_work_experience(self, resume_json):
@@ -322,19 +328,43 @@ class Resume:
             date = self.date_format(item["releaseDate"])
             publication.append(item["publisher"]+" - "+date)
             
-            publication.append(item["url"])
+            publication.append("<a href="+item["url"]+">"+item["url"]+"</a>")
             publication.append(item["summary"])
             publications_list.append("<br/>".join(publication))
         return publications_list
     
+    def process_profiles(self, resume_json):
+        """summary: Process the profiles section of the resume json
+
+        Args:
+            resume_json (json): the resume json
+
+        Returns:
+            list: A list of profiles objects
+        """
+        profiles_list = []
+        if resume_json["basics"]["url"] != "":
+            profiles_list.append(resume_json["basics"]["url"])
+        for item in resume_json["basics"]["profiles"]:
+            if item["network"].lower() == "github" or item["network"].lower() == "git":
+                profiles_list.append(chr(0xeba1)+" :"+item["username"]) if self.theme["nerd"] else profiles_list.append("Github: "+item["username"])
+            if item["network"].lower() == "linkedin":
+                profiles_list.append(chr(0xf08c)+" :"+item["username"]) if self.theme["nerd"] else profiles_list.append("LinkedIn: "+item["username"])
+            if item["network"].lower() == "stackoverflow":
+                profiles_list.append(chr(0xf16c)+" :"+item["username"]) if self.theme["nerd"] else profiles_list.append("Stack Overflow: "+item["username"])
+        if len(profiles_list) == 0:
+            return ""
+        return " ".join(profiles_list)
+    
     # THIS ISNT MUCH BETTER
     # NESTED MESS
     def required_fields(self, resume_json):
-        if not self.required_fields_worker(resume_json):
-            raise Exception("Required fields cannot be empty! Please check the resume.json file and fix")
+        error = self.required_fields_worker(resume_json)
+        if error != True:
+            raise Exception(f"{error} is required and cannot be empty! Please check the resume.json file and fix")
         return True
     
-    def required_fields_worker(self, resume_json) -> bool:
+    def required_fields_worker(self, resume_json):
         """summary: Check if the required fields are empty
 
         Args:
@@ -345,12 +375,12 @@ class Resume:
         """
         for field in self.required.keys():
             if self.required[field]["required"] == "True" and field not in resume_json.keys():
-                return False
+                return field
             if field not in resume_json.keys(): # if the field is not in the resume json and is not required we skip it
                 continue
             if self.required[field]["required"] == "True" or len(resume_json[field]) > 0:
                 if type(resume_json[field]) == list and len(resume_json[field]) == 0:
-                    return False
+                    return field
                 elif type(resume_json[field]) == dict:
                     for item in self.required[field]["fields"]:
                         if item not in resume_json[field].keys():
@@ -358,36 +388,48 @@ class Resume:
                         if type(resume_json[field][item]) == dict:
                             for subitem in self.required[field][item]['fields']: #loop for subfields like profiles
                                 if resume_json[field][item][subitem] == "":
-                                    return False
+                                    return field + "/" + item
                         elif resume_json[field][item] == "":
-                            return False
+                            return field + "/" + item
                 elif type(resume_json[field]) == list:
                     for i in range(len(resume_json[field])):
                         for item in self.required[field]["fields"]:
                             if type(resume_json[field][i][item]) == list and len(resume_json[field][i][item]) == 0:
-                                return False
+                                return field + "/" + item
                             elif resume_json[field][i][item] == "":
-                                return False
+                                return field + "/" + item
         return True
-          
+
+    
+    def centered_style(self, resume_json, contact):
+        if contact["website"] == "":
+            key = [k for k, v in self.theme["head"].items() if v == 'website'][0]
+            self.theme["head"][key] = False
+        holder = contact["website"].split(" ")
+        if len(holder) > 2 and contact["website"] != "" and "information" in self.theme["head"].values(): #if profiles exist and we are using information
+            holder = contact["website"].split(" ")
+            contact["website"] = holder[0]
+            holder.pop(0)
+            contact["profiles"] = " ".join(holder)
+            self.theme["head"]["center2Bot"] = 'profiles'
+            
+        contact['information'] = [contact['email'], contact['address'], contact['phone'], contact['website']]
+        contact["information"].pop() if contact["website"] == "" else contact["information"]
+        contact["information"] = " - ".join(contact["information"])
+         
+         
     def generate_resume(self, resume_json):
         self.required_fields(resume_json)
 
         order = {}
         contact = {
             'name': resume_json["basics"]["name"],
-            'website': resume_json["basics"]["url"], #what assumtions do we want to make a but website? 
+            'website': self.process_profiles(resume_json), #what assumtions do we want to make a but website? 
             'email': resume_json["basics"]["email"],
             'phone': resume_json["basics"]["phone"]
             }
         contact['address'] = resume_json["basics"]["location"]['city']  + " " + resume_json["basics"]["location"]['region']+", " + resume_json["basics"]["location"]['countryCode']
-        contact['information'] = [contact['email'], contact['address'], contact['phone'], contact['website']]
-        contact["information"].pop() if contact["website"] == "" else contact["information"]
-        contact["information"] = "   -   ".join(contact["information"])
-        if contact["website"] == "":
-            key = [k for k, v in self.theme["head"].items() if v == 'website'][0]
-            self.theme["head"][key] = False
-        
+        self.centered_style(resume_json, contact)
         data = {
             'summary': resume_json["basics"]["summary"]}
         #adds item into data
@@ -409,25 +451,27 @@ class Resume:
         order["publications"] = ['PUBLICATIONS', [Paragraph(x, self.styles['Content']) for x in data['publications']]] if "publications" in resume_json.keys() else None
         #orders table based on order in theme.json
         tblData = [order[x] for x in self.theme["ordering"]["body"] if order[x] != None]
-        
         return self.generate_pdf(tblData, contact)
-    
-    def apply_styles(self):
+
+    #used to dyamically adjust the size of the pdf to attempt to fit page
+    def addstyles(self):
         self.styles.add(ParagraphStyle(name='Content',
                             fontFamily=self.theme["fonts"]["fontFamily"],
                             fontSize=self.theme["fonts"]["fontSize"],
                             spaceAfter=self.theme["paragraph"]["spaceAfter"]*inch,
                             leftIndent=0,
                             rightIndent=0))
-
+        
     def apply_theme(self, theme_json):
         #sets up paragraph styles
         self.theme = theme_json
         self.register_fonts()
         self.height = theme_json["page"]["height"] * inch
         self.width = theme_json["page"]["width"] * inch
-        self.apply_styles()
+        self.addstyles()
         
+
+    
     #this is mostly for testing purposes
     def get_default_theme(self):
         dir_name = os.path.join(os.path.dirname(__file__), 'themes')
