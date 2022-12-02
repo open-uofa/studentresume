@@ -391,6 +391,3 @@ def test_two_page():
       bad["education"] = ["a","b","c"]
         
       assert resume.two_page(resume_json) == True
-        
-        
-  
