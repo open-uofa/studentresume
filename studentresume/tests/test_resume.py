@@ -39,7 +39,7 @@ def test_process_projects():
         data = f.read()
     resume_json = loads(data)
     
-    assert(resume.process_projects(resume_json)) == ['<b>Miss Direction</b>: A mapping engine that misguides you - <b>2016-08-24</b><br/>http://missdirection.example.com<br/><b>Techonology Used</b>: GoogleMaps, Chrome Extension, Javascript<br/><b>Highlights: </b><br/>- Won award at AIHacks 2016<br/>- Built by all women team of newbie programmers<br/>- Using modern technologies such as GoogleMaps, Chrome Extension and Javascript']
+    assert(resume.process_projects(resume_json)) == ['<b>Miss Direction</b>: A mapping engine that misguides you - <b>2016-08-24</b><br/><a href=http://missdirection.example.com>http://missdirection.example.com</a><br/><b>Techonology Used</b>: GoogleMaps, Chrome Extension, Javascript<br/><b>Highlights: </b><br/>- Won award at AIHacks 2016<br/>- Built by all women team of newbie programmers<br/>- Using modern technologies such as GoogleMaps, Chrome Extension and Javascript']
     assert resume.process_projects(resume_json) != ""
 
 def test_process_work_experience():
@@ -75,7 +75,7 @@ def test_process_publications():
     resume_json = loads(data)
     resume = Resume(False)
     resume.get_default_theme()
-    assert(resume.process_publications(resume_json)) == ['<b>Video compression for 3d media</b><br/>Hooli - 2014-10-01<br/>http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)<br/>Innovative middle-out compression algorithm that changes the way we store data.']
+    assert(resume.process_publications(resume_json)) == ['<b>Video compression for 3d media</b><br/>Hooli - 2014-10-01<br/><a href=http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)>http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)</a><br/>Innovative middle-out compression algorithm that changes the way we store data.']
     assert resume.process_publications(resume_json) != ""
       
 
@@ -391,6 +391,3 @@ def test_two_page():
       bad["education"] = ["a","b","c"]
         
       assert resume.two_page(resume_json) == True
-        
-        
-  
