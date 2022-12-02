@@ -53,10 +53,6 @@ class Resume:
             frame1 = Frame(doc.leftMargin, doc.bottomMargin, doc.width/2-6, doc.height, id='col1')
             frame2 = Frame(doc.leftMargin+doc.width/2+6, doc.bottomMargin, doc.width/2-6, doc.height, id='col2')
             doc.addPageTemplates([PageTemplate(id='TwoCol', onPage=self.myPageWrapper(contact), frames=[frame1,frame2])]) 
-        else:
-            c = canvas.Canvas(pdfname)
-            frame1 = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, showBoundary=1, id='col1')
-            doc.addPageTemplates([PageTemplate(id='OneCol', onPage=self.myPageWrapper(contact), frames=[frame1])])
         story = []  # create a blank story to tell
         contentTable = Table(
              data,
@@ -71,33 +67,6 @@ class Resume:
               ('ALIGN', (0, 0), (-1, -1), self.theme["tableStyles"]["align"])])
         contentTable.setStyle(tblStyle)
         story.append(contentTable)
-        
-        if self.page == 1:
-            for p in story:
-                    while frame1.add(p, c) == 0:
-                        print(len(story))
-                        while len(story) > 0:
-                            story.pop()
-                        print("New Page")
-                        print(len(story))
-                        print(self.theme["fonts"]["fontSize"])
-                        self.theme["fonts"]["fontSize"] = self.theme["fonts"]["fontSize"] - 1
-                        print(self.theme["fonts"]["fontSize"])
-                        self.styles = getSampleStyleSheet()
-                        tblStyle = TableStyle([ # sents font and colours used within the table (left side is titles right side is content)
-                            ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor(self.theme["fonts"]["fontColor"])),
-                            ('FONT', (0, 0), (0, 0), self.theme["fonts"]["fontName"]),
-                            ('FONTSIZE', (0, 0), (-1, -1), self.theme["fonts"]["fontSize"]),
-                            ('VALIGN', (0, 0), (-1, -1), self.theme["tableStyles"]["valign"]),
-                            ('ALIGN', (0, 0), (-1, -1), self.theme["tableStyles"]["align"])])
-                        contentTable.setStyle(tblStyle)
-                        story.append(contentTable)
-                        self.generate_resume()
-                        
-         # fontSize = fontSize - 1   
-        # self.apply_styles()
-        # self.theme["fonts"]["fontSize"] = self.theme["fonts"]["fontSize"] - 1
-        
         doc.build(
             story,
             onFirstPage=self.myPageWrapper(
@@ -185,9 +154,9 @@ class Resume:
         Returns:
             string: The formatted end date
         """ 
-        current_date_Day  = datetime.date.today().day
-        current_date_Month  = datetime.date.today().month
-        current_date_Year  = datetime.date.today().year
+        current_date_Day  = datetime.today().day
+        current_date_Month  = datetime.today().month
+        current_date_Year  = datetime.today().year
         
         end_date_Day = datetime.strptime(end_date, '%Y-%m-%d').day
         end_date_Month = datetime.strptime(end_date, '%Y-%m-%d').month
@@ -400,70 +369,10 @@ class Resume:
                             elif resume_json[field][i][item] == "":
                                 return False
         return True
-    
-    # def one_page(self, resume_json):
-    #     if len(resume_json["basics"]["summary"]) > 650:
-    #         raise Exception("Summary is too long! Please shorten it to make it fit on one page")
-    #     if len(resume_json["education"]) > 2:
-    #         raise Exception("Too many education entries! Please shorten it to 2 or less to make it fit on one page")
-    #     if len(resume_json["skills"]) > 2:
-    #         raise Exception("You have more than two skills entries! Please remove all but two to make it fit on one page")
-    #     if len(resume_json["work"]) > 2:
-    #         raise Exception("You have more than two work entries! Please remove all but two to make it fit on one page")
-    #     else:
-    #         if len(resume_json["work"]) <= 2:
-    #             for i in range(len(resume_json["work"])):
-    #                 if len(resume_json["work"][i]["summary"]) > 250:
-    #                     raise Exception("Work summary is too long! Please shorten it to make it fit on one page")
-    #                 if len(resume_json["work"][i]["highlights"]) > 2:
-    #                     raise Exception("You have more than two work highlights! Please remove all but two to make it fit on one page")
-    #                 else:
-    #                     if len(resume_json["work"][i]["highlights"]) <= 2:
-    #                         for j in range(len(resume_json["work"][i]["highlights"])):
-    #                             if len(resume_json["work"][i]["highlights"][j]) > 100:
-    #                                 raise Exception("Work highlight is too long! Please shorten it to make it fit on one page")
-    #     if len(resume_json["projects"]) > 2:
-    #         raise Exception("You have more than two projects entries! Please remove all but two to make it fit on one page")
-    #     else:
-    #         if len(resume_json["projects"]) <= 2:
-    #             for i in range(len(resume_json["projects"])):
-    #                 if len(resume_json["projects"][i]["description"]) > 90:
-    #                     raise Exception("Project description is too long! Please shorten it to make it fit on one page")
-    #                 if len(resume_json["projects"][i]["highlights"]) > 2:
-    #                     raise Exception("You have more than two project highlights! Please remove all but two to make it fit on one page")
-    #                 else:
-    #                     if len(resume_json["projects"][i]["highlights"]) <= 2:
-    #                         for j in range(len(resume_json["projects"][i]["highlights"])):
-    #                             if len(resume_json["projects"][i]["highlights"][j]) > 100:
-    #                                 raise Exception("Project highlight is too long! Please shorten it to make it fit on one page")
-    #     if len(resume_json["volunteer"]) > 1:
-    #         raise Exception("You have more than one volunteer entries! Please remove all but one to make it fit on one page")
-    #     else:
-    #         for i in range(len(resume_json["volunteer"])):
-    #             if len(resume_json["volunteer"][i]["summary"]) > 100:
-    #                 raise Exception("Volunteer summary is too long! Please shorten it to make it fit on one page")
-    #     if len(resume_json["awards"]) > 1:
-    #         raise Exception("You have more than one awards entries! Please remove all but one to make it fit on one page")
-    #     else:
-    #         for i in range(len(resume_json["awards"])):
-    #             if len(resume_json["awards"][i]["summary"]) > 100:
-    #                 raise Exception("Awards summary is too long! Please shorten it to make it fit on one page")   
-    #     if len(resume_json["publications"]) > 1:
-    #         raise Exception("You have more than one publications entries! Please remove all but one to make it fit on one page")
-    #     else:
-    #         for i in range(len(resume_json["publications"])): 
-    #             if len(resume_json["publications"][i]["summary"]) > 100:
-    #                 raise Exception("Publications summary is too long! Please shorten it to make it fit on one page")
-    #     return True
           
     def generate_resume(self, resume_json):
         self.required_fields(resume_json)
-        
-        # if self.page == 1:
-        #     self.one_page(resume_json)
-        # else:
-        #     None
-        
+
         order = {}
         contact = {
             'name': resume_json["basics"]["name"],
