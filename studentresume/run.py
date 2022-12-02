@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-
-
 from json import loads
 from rich import print
 from typing import Optional
