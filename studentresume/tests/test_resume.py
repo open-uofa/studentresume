@@ -18,7 +18,7 @@ def test_process_education():
         data = f.read()
     resume_json = loads(data)
     # check the output of the function to make sure it returns the correct value
-    assert resume.process_education(resume_json) == ['<b>University of Oklahoma</b>', '<b>Bachelor</b> Information Technology', '<b>Dates: </b>2011-06-01 through 2014-01-01', '<b>GPA:</b> 4.0']
+    assert resume.process_education(resume_json) == ['<b>University of Oklahoma</b>', '<b>Bachelor</b> Information Technology', '<b>Dates: </b>June, 2011 - January, 2014', '<b>GPA:</b> 4.0']
     assert resume.process_education(resume_json) != ""
     
     # check the exception raised to make sure it raises the correct error
@@ -39,7 +39,7 @@ def test_process_projects():
         data = f.read()
     resume_json = loads(data)
     
-    assert(resume.process_projects(resume_json)) == ['<b>Miss Direction</b>: A mapping engine that misguides you - <b>2016-08-24</b><br/><a href=http://missdirection.example.com>http://missdirection.example.com</a><br/><b>Techonology Used</b>: GoogleMaps, Chrome Extension, Javascript<br/><b>Highlights: </b><br/>- Won award at AIHacks 2016<br/>- Built by all women team of newbie programmers<br/>- Using modern technologies such as GoogleMaps, Chrome Extension and Javascript']
+    assert(resume.process_projects(resume_json)) == ['<b>Miss Direction</b>: A mapping engine that misguides you - <b>August, 2016</b><br/><a href=http://missdirection.example.com>http://missdirection.example.com</a><br/><b>Techonology Used</b>: GoogleMaps, Chrome Extension, Javascript<br/><b>Highlights: </b><br/>- Won award at AIHacks 2016<br/>- Built by all women team of newbie programmers<br/>- Using modern technologies such as GoogleMaps, Chrome Extension and Javascript']
     assert resume.process_projects(resume_json) != ""
 
 def test_process_work_experience():
@@ -48,7 +48,7 @@ def test_process_work_experience():
     resume_json = loads(data)
     resume = Resume(False)
     resume.get_default_theme()
-    assert(resume.process_work_experience(resume_json)) == ['<b>Pied Piper</b>: - Palo Alto, CA<br/><b>CEO/President</b>: 2013-12-01 through 2014-12-01<br/>Pied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.<br/><b>Highlights: </b><br/>- Build an algorithm for artist to detect if their music was violating copy right infringement laws<br/>- Successfully won Techcrunch Disrupt<br/>- Optimized an algorithm that holds the current world record for Weisman Scores']
+    assert(resume.process_work_experience(resume_json)) == ['<b>Pied Piper</b>: - Palo Alto, CA<br/><b>CEO/President</b>: December, 2013 - December, 2014<br/>Pied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.<br/><b>Highlights: </b><br/>- Build an algorithm for artist to detect if their music was violating copy right infringement laws<br/>- Successfully won Techcrunch Disrupt<br/>- Optimized an algorithm that holds the current world record for Weisman Scores']
     assert resume.process_work_experience(resume_json) != ""
 
 def test_process_vol_experience():
@@ -57,7 +57,7 @@ def test_process_vol_experience():
     resume_json = loads(data)
     resume = Resume(False)
     resume.get_default_theme()
-    assert(resume.process_vol_experience(resume_json)) == ["<b>CoderDojo</b> 2012-01-01 through 2013-01-01<br/>Global movement of free coding clubs for young people.<br/><b>Highlights: </b><br/>- Awarded 'Teacher of the Month'"]
+    assert(resume.process_vol_experience(resume_json)) == ["<b>CoderDojo</b> January, 2012 - January, 2013<br/>Global movement of free coding clubs for young people.<br/><b>Highlights: </b><br/>- Awarded 'Teacher of the Month'"]
     assert resume.process_vol_experience(resume_json) != ""
     
 def test_process_awards():
@@ -66,7 +66,7 @@ def test_process_awards():
     resume_json = loads(data)
     resume = Resume(False)
     resume.get_default_theme()
-    assert(resume.process_awards(resume_json)) == ['<b>Digital Compression Pioneer Award</b><br/>Awarded by: Techcrunch - 2014-11-01<br/>There is no spoon.']
+    assert(resume.process_awards(resume_json)) == ['<b>Digital Compression Pioneer Award</b><br/>Awarded by: Techcrunch - November, 2014<br/>There is no spoon.']
     assert resume.process_awards(resume_json) != ""
 
 def test_process_publications():
@@ -75,7 +75,7 @@ def test_process_publications():
     resume_json = loads(data)
     resume = Resume(False)
     resume.get_default_theme()
-    assert(resume.process_publications(resume_json)) == ['<b>Video compression for 3d media</b><br/>Hooli - 2014-10-01<br/><a href=http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)>http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)</a><br/>Innovative middle-out compression algorithm that changes the way we store data.']
+    assert(resume.process_publications(resume_json)) == ['<b>Video compression for 3d media</b><br/>Hooli - October, 2014<br/><a href=http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)>http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)</a><br/>Innovative middle-out compression algorithm that changes the way we store data.']
     assert resume.process_publications(resume_json) != ""
       
 
@@ -315,79 +315,3 @@ def test_required_fields_volunteer():
   bad["volunteer"][0]["highlights"] = []
   with pytest.raises(Exception):
         resume.required_fields(bad)
-        
-def test_one_page():
-      resume = Resume(False)
-      resume.get_default_theme()
-      with open("testonepage.resume.json", encoding="utf8") as f:
-            data = f.read()
-      resume_json = loads(data)
-      bad = deepcopy(resume_json)
-      
-      bad["basics"]["summary"] = "a" * 651
-      with pytest.raises(Exception):
-        resume.one_page(bad)
-      bad["basics"]["summary"] = "a" * 650
-      
-      bad["work"][0]["summary"] = "a" * 251
-      with pytest.raises(Exception):
-        resume.one_page(bad)
-      bad["work"][0]["summary"] = "a" * 250
-      
-      bad["work"][0]["highlights"][0] = "a" * 101
-      with pytest.raises(Exception):
-        resume.one_page(bad) 
-      bad["work"][0]["highlights"][0] = "a" * 100
-      
-      bad["education"] = ["a","b","c"]
-      with pytest.raises(Exception):
-        resume.one_page(bad)
-      bad["education"] = ["a","b"]
-        
-      assert resume.one_page(resume_json) == True
-        
-     
-def test_two_page():
-      resume = Resume(False)
-      resume.get_default_theme()
-      with open("sample.resume.json", encoding="utf8") as f:
-            data = f.read()
-      resume_json = loads(data)
-      bad = deepcopy(resume_json)
-      
-      bad["basics"]["summary"] = "a" * 1301
-      with pytest.raises(Exception):
-        resume.two_page(bad)
-      bad["basics"]["summary"] = "a" * 1300
-      
-      bad["projects"][0]["description"] = "a" * 91
-      with pytest.raises(Exception):
-        resume.one_page(bad)
-      bad["projects"][0]["description"] = "a" * 90
-      
-      bad["projects"][0]["highlights"][0] = "a" * 101
-      with pytest.raises(Exception):
-        resume.two_page(bad)
-      bad["projects"][0]["highlights"][0] = "a" * 100
-        
-      bad["volunteer"][0]["summary"] = "a" * 101
-      with pytest.raises(Exception):
-        resume.two_page(bad) 
-      bad["volunteer"][0]["summary"] = "a" * 100
-        
-      bad["awards"][0]["summary"] = "a" * 101
-      with pytest.raises(Exception):
-       resume.two_page(bad)
-      bad["awards"][0]["summary"] = "a" * 100
-       
-      bad["publications"][0]["summary"] = "a" * 101
-      with pytest.raises(Exception):
-        resume.two_page(bad)
-      bad["publications"][0]["summary"] = "a" * 100
-        
-      bad["education"] = ["a","b","c","d","e"]
-      with pytest.raises(Exception):
-        resume.two_page(bad)
-      bad["education"] = ["a","b","c"]
-        
-      assert resume.two_page(resume_json) == True
