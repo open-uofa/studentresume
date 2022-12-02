@@ -54,7 +54,8 @@ def main(resume_json: Path = typer.Argument(None, help="Path to resume JSON file
         raise typer.BadParameter("Resume JSON file not found")
     if theme_json != None and not theme_json.exists():
         raise typer.BadParameter("Theme JSON file not found")
-    if not is_valid_resume(resume_json.read_text()):
+    resume_string = get_file(resume_json, False)
+    if not is_valid_resume(resume_string):
         raise typer.BadParameter("Invalid JSON")
     print("[bold green]Valid JSON[/bold green]")
     resume = Resume(False)
@@ -68,11 +69,11 @@ def main(resume_json: Path = typer.Argument(None, help="Path to resume JSON file
         theme = "custom theme!"
         if not is_valid_theme(theme_json.read_text()):
             raise typer.BadParameter("Invalid theme JSON")
-        resume.apply_theme(loads(theme_json.read_text()))
+        resume.apply_theme(loads(get_file(theme_json, False)))
     print("[bold green]restricting to one page[/bold green]") if onepage else None
     resume.set_page(1 if onepage else None)   
     print(f"[bold green]Generating resume with[/bold green][bold blue] {resume_json}[/bold blue][bold green] and style [/bold green][bold blue]{theme}[/bold blue]")
-    resume.generate_resume(loads(resume_json.read_text()))
+    resume.generate_resume(loads(resume_string))
 
 if __name__ == "__main__":
     app()
