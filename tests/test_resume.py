@@ -3,18 +3,21 @@ from json import loads
 
 import pytest
 
-from ..resume import *
+from studentresume.resume import *
 
 """
     Test each function that retrives information to confirm that the list returned the correct data and format.
     Create mock objects to check the exceptions in the function.
 """
+
+sample_resume_path = os.path.join("studentresume", "sample.resume.json")
+
         
 def test_process_education():
     # read in data from sample.resume.json
     resume = Resume(False)
     resume.get_default_theme()
-    with open("sample.resume.json", encoding="utf8") as f:
+    with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
     resume_json = loads(data)
     # check the output of the function to make sure it returns the correct value
@@ -26,7 +29,7 @@ def test_process_education():
 def test_process_skills():
     resume = Resume(False)
     resume.get_default_theme()
-    with open("sample.resume.json", encoding="utf8") as f:
+    with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
     resume_json = loads(data) 
     assert(resume.process_skills(resume_json)) == ['<b>Web Development</b>: HTML, CSS, Javascript', '<b>Compression</b>: Mpeg, MP4, GIF']
@@ -35,7 +38,7 @@ def test_process_skills():
 def test_process_projects():
     resume = Resume(False)
     resume.get_default_theme()
-    with open("sample.resume.json", encoding="utf8") as f:
+    with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
     resume_json = loads(data)
     
@@ -43,7 +46,7 @@ def test_process_projects():
     assert resume.process_projects(resume_json) != ""
 
 def test_process_work_experience():
-    with open("sample.resume.json", encoding="utf8") as f:
+    with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
     resume_json = loads(data)
     resume = Resume(False)
@@ -52,7 +55,7 @@ def test_process_work_experience():
     assert resume.process_work_experience(resume_json) != ""
 
 def test_process_vol_experience():
-    with open("sample.resume.json", encoding="utf8") as f:
+    with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
     resume_json = loads(data)
     resume = Resume(False)
@@ -61,7 +64,7 @@ def test_process_vol_experience():
     assert resume.process_vol_experience(resume_json) != ""
     
 def test_process_awards():
-    with open("sample.resume.json", encoding="utf8") as f:
+    with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
     resume_json = loads(data)
     resume = Resume(False)
@@ -70,7 +73,7 @@ def test_process_awards():
     assert resume.process_awards(resume_json) != ""
 
 def test_process_publications():
-    with open("sample.resume.json", encoding="utf8") as f:
+    with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
     resume_json = loads(data)
     resume = Resume(False)
@@ -80,7 +83,7 @@ def test_process_publications():
       
 
 def test_required_fields_basics():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
@@ -116,7 +119,7 @@ def test_required_fields_basics():
         resume.required_fields(bad)
   
 def test_required_fields_empty():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
         data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
@@ -132,7 +135,7 @@ def test_required_fields_empty():
         resume.required_fields(bad)
         
 def test_required_fields_skills():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
       data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
@@ -156,7 +159,7 @@ def test_required_fields_skills():
         resume.required_fields(bad)
         
 def test_required_fields_education():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
       data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
@@ -181,7 +184,7 @@ def test_required_fields_education():
         resume.required_fields(bad)
 
 def test_required_fields_work():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
       data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
@@ -217,7 +220,7 @@ def test_required_fields_work():
         resume.required_fields(bad)
   
 def test_required_fields_projects():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
       data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
@@ -237,7 +240,7 @@ def test_required_fields_projects():
         resume.required_fields(bad)
   
 def test_required_fields_awards():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
       data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
@@ -261,7 +264,7 @@ def test_required_fields_awards():
         resume.required_fields(bad)
   
 def test_required_fields_publications():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
       data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
@@ -289,7 +292,7 @@ def test_required_fields_publications():
         resume.required_fields(bad)
 
 def test_required_fields_volunteer():
-  with open("sample.resume.json", encoding="utf8") as f:
+  with open(sample_resume_path, encoding="utf8") as f:
       data = f.read()
   resume_json = loads(data)
   resume = Resume(False)
