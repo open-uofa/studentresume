@@ -1,7 +1,9 @@
 from typer.testing import CliRunner
 import os.path
 
-from ..run import app
+default_theme_path = os.path.join("studentresume", "themes", "default.json")
+
+from studentresume.run import app
 
 runner = CliRunner()
 
@@ -42,7 +44,8 @@ def test_app_invalid_theme():
     
 def test_app_valid_theme():
     theme = str(os.path.join("themes", "default.json"))
-    result = runner.invoke(app, ["sample.resume.json", theme])
+    print(default_theme_path)
+    result = runner.invoke(app, ["sample.resume.json", default_theme_path])
     assert result.exit_code == 0
     assert "Valid JSON" in result.stdout
     assert "Generating resume with sample.resume.json and style custom theme!" in result.stdout

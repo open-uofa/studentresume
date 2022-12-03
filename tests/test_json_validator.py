@@ -1,10 +1,15 @@
-from ..json_validator import is_valid_resume
-from ..json_validator import is_valid_theme
+from studentresume.json_validator import is_valid_resume, is_valid_theme
+
+import os.path
+
+sample_resume_path = os.path.join("studentresume", "sample.resume.json")
+default_theme_path = os.path.join("studentresume", "themes", "default.json")
+
 
 def test_is_valid_resume():
     
     # test with sample resume
-    with open("sample.resume.json", encoding="utf8") as f:
+    with open(sample_resume_path, encoding="utf8") as f:
         json_string = f.read()
     assert is_valid_resume(json_string) is True
 
@@ -19,7 +24,7 @@ def test_is_valid_resume():
 def test_is_valid_theme():
 
     # test with sample theme
-    with open("themes/default.json", encoding="utf8") as f:
+    with open(default_theme_path, encoding="utf8") as f:
         json_string = f.read()
     assert is_valid_theme(json_string) is True
 
