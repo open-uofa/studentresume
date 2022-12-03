@@ -1,7 +1,7 @@
 from setuptools import setup
 
 entry_point = (
-    "command = studentresume.run"
+    "command = studentresume.run:main"
 )
 
 setup(
