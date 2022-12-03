@@ -41,6 +41,24 @@ def is_valid_resume(json_string: str) -> bool:
     return False
 
 
+def is_valid_theme(json_string: str) -> bool:
+    """
+    Returns True if the json_string is a valid json theme as defined
+    in the theme schema file, False otherwise.
+    """
+    schema_file = os.path.join(os.path.dirname(__file__), "theme-schema.json")
+    with open(schema_file, encoding="utf8") as f:
+        schema = json.load(f)
+
+    if _is_valid_json(json_string):
+        try:
+            validate(json.loads(json_string), schema)
+        except Exception as e:
+            print(e)
+            return False
+        return True
+    return False
+
 
 if __name__ == '__main__':
     """
@@ -48,5 +66,3 @@ if __name__ == '__main__':
     """
     with open("sample.resume.json", encoding="utf8") as f:
         json_string = f.read()
-    print(is_valid_resume(json_string))
-

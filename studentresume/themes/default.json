@@ -1,8 +1,8 @@
 {
     "fonts":{
-        "font": "fonts/Inconsolata-Regular.ttf",
+        "font": "fonts/Inconsolata-Regular-Nerd.ttf",
         "fontSize": 8,
-        "fontBold": "fonts/Inconsolata-Bold.ttf",
+        "fontBold": "fonts/Inconsolata-Bold-Nerd.ttf",
         "fontItalic": "fonts/Inconsolata-Italic.ttf",
         "fontName": "Inconsolata",
         "fontBoldName": "InconsolataBold",
@@ -46,7 +46,8 @@
         "rightTop": "website",
         "centerBot": "address",
         "centerTop": false,
-        "rightBot": "email"
+        "rightBot": "email",
+        "center2Bot": false
 
     },
     "headAln": {
@@ -55,7 +56,8 @@
         "rightTop": [0.4, 0.4],
         "centerBot": [2.0, 0.6],
         "centerTop": [2.0, 0.4],
-        "rightBot": [0.4, 0.6]
+        "rightBot": [0.4, 0.6],
+        "center2Bot": [0.4, 0.6]
     },
     "headTitle": {
         "leftTop": true,
@@ -63,9 +65,11 @@
         "rightTop": false,
         "centerBot": false,
         "centerTop": false,
-        "rightBot": false
+        "rightBot": false,
+        "center2Bot": false
     },
     "headLine": [0.4, 0.47, 0.4, 0.47],
-    "multiCol": false
+    "multiCol": false,
+    "nerd": true
     
 }
