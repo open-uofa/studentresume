@@ -12,6 +12,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Frame, PageTemplate
 from reportlab.platypus.flowables import Spacer
+from reportlab.platypus.doctemplate import LayoutError
 
 import os.path
 
@@ -93,19 +94,22 @@ class Resume:
                 onFirstPage=self.myPageWrapper(
                     contact),
                 )
-        except:
-            if self.theme["fonts"]["fontSize"] < 6:
-                raise Exception("Too much content for the page.")
-            self.theme["fonts"]["fontSize"] = self.theme["fonts"]["fontSize"] - 1
-            if self.theme["tableStyles"]["colWidths"][0] < 0.06:
-                raise Exception("Too much content for the page.")
-            self.theme["tableStyles"]["colWidths"][0] = self.theme["tableStyles"]["colWidths"][0] - 0.1
-            if self.theme["tableStyles"]["colWidths"][1] < 6:
-                raise Exception("Too much content for the page.")
-            self.theme["tableStyles"]["colWidths"][1] = self.theme["tableStyles"]["colWidths"][1] + 0.1
-            self.styles = getSampleStyleSheet()
-            self.addstyles()
-            self.generate_resume(self.resume_json)
+        except LayoutError:
+            if self.page == 1:
+                if self.theme["fonts"]["fontSize"] < 6:
+                    raise Exception("Too much content for the page.")
+                self.theme["fonts"]["fontSize"] = self.theme["fonts"]["fontSize"] - 1
+                if self.theme["tableStyles"]["colWidths"][0] < 0.06:
+                    raise Exception("Too much content for the page.")
+                self.theme["tableStyles"]["colWidths"][0] = self.theme["tableStyles"]["colWidths"][0] - 0.1
+                if self.theme["tableStyles"]["colWidths"][1] < 6:
+                    raise Exception("Too much content for the page.")
+                self.theme["tableStyles"]["colWidths"][1] = self.theme["tableStyles"]["colWidths"][1] + 0.1
+                self.styles = getSampleStyleSheet()
+                self.addstyles()
+                self.generate_resume(self.resume_json)
+            else: 
+                raise LayoutError("Too much content for the page.")
         
         
         if self.web:
