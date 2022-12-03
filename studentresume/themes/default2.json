@@ -44,7 +44,8 @@
         "rightTop": false,
         "centerBot": "information",
         "centerTop": "name",
-        "rightBot": false
+        "rightBot": false,
+        "center2Bot": false
 
     },
     "headAln": {
@@ -53,7 +54,8 @@
         "rightTop": [0.4, 0.4],
         "centerBot": [2.0, 0.6],
         "centerTop": [2.0, 0.4],
-        "rightBot": [0.4, 0.6]
+        "rightBot": [0.4, 0.6],
+        "center2Bot": [2.0, 0.725]
     },
     "headTitle": {
         "leftTop": false,
@@ -61,8 +63,10 @@
         "rightTop": false,
         "centerBot": false,
         "centerTop": true,
-        "rightBot": false
+        "rightBot": false,
+        "center2Bot": false
     },
     "headLine": [0.4, 0.47, 0.4, 0.47],
-    "multiCol": false
+    "multiCol": false,
+    "nerd": false
 }

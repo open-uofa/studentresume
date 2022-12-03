@@ -1,5 +1,9 @@
 from setuptools import setup
 
+entry_point = (
+    "command = studentresume.run"
+)
+
 setup(
     name='studentresume',
     version='0.1.0',    
@@ -9,6 +13,7 @@ setup(
     author_email='dble@ualberta.ca, yzhang24@ualberta.ca, jrobock@ualberta.ca, ckennedy@ualberta.ca, qu8@ualberta.ca, alzafara@ualberta.ca',
     license='MIT License',
     packages=['studentresume'],
+    entry_points={"console_scripts": [entry_point]},
     install_requires=[
                     'jsonschema==4.17.3',
                     'reportlab==3.6.12',         

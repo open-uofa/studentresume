@@ -66,4 +66,3 @@ if __name__ == '__main__':
     """
     with open("sample.resume.json", encoding="utf8") as f:
         json_string = f.read()
-    print(is_valid_resume(json_string))
