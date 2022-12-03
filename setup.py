@@ -21,6 +21,7 @@ setup(
     package_data={'studentresume': ['requiredFields.json', 
                                     'sample.resume.json',
                                     'schema.json',
+                                    'theme-schema.json',
                                     'testonepage.resume.json',
                                     'themes/*',
                                     'fonts/*',]},
