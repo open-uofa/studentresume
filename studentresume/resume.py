@@ -57,21 +57,57 @@ class Resume:
         contentTable = Table(
              data,
              colWidths=[
-                 self.theme["tableStyles"]["colWidths"][0] * inch,
-                 self.theme["tableStyles"]["colWidths"][1] * inch])
+                self.theme["tableStyles"]["colWidths"][0] * inch,
+                self.theme["tableStyles"]["colWidths"][1] * inch])
+        contentTable2 = Table(
+             data,
+             colWidths=[
+                self.theme["tableStyles"]["colWidths"][0] * inch,
+                self.theme["tableStyles"]["colWidths"][1] * inch],
+                splitByRow=0)
         tblStyle = TableStyle([ # sents font and colours used within the table (left side is titles right side is content)
               ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor(self.theme["fonts"]["fontColor"])),
               ('FONT', (0, 0), (-1, -1), self.theme["fonts"]["fontName"]),
               ('FONTSIZE', (0, 0), (-1, -1), self.theme["fonts"]["fontSize"]),
               ('VALIGN', (0, 0), (-1, -1), self.theme["tableStyles"]["valign"]),
               ('ALIGN', (0, 0), (-1, -1), self.theme["tableStyles"]["align"])])
-        contentTable.setStyle(tblStyle)
-        story.append(contentTable)
-        doc.build(
-            story,
-            onFirstPage=self.myPageWrapper(
-                contact),
-            )
+       
+        if self.page==1:
+            contentTable2.setStyle(tblStyle)
+            story.append(contentTable2)
+        else:
+            contentTable.setStyle(tblStyle)
+            story.append(contentTable)
+            
+        # print(story)
+            
+        # doc.build(
+        #     story,
+        #     onFirstPage=self.myPageWrapper(
+        #         contact),
+        #     )
+        
+        try:
+            doc.build(
+                story,
+                onFirstPage=self.myPageWrapper(
+                    contact),
+                )
+        except:
+            if self.theme["fonts"]["fontSize"] < 6:
+                raise Exception("Too much content for the page.")
+            self.theme["fonts"]["fontSize"] = self.theme["fonts"]["fontSize"] - 1
+            if self.theme["tableStyles"]["colWidths"][0] < 0.06:
+                raise Exception("Too much content for the page.")
+            self.theme["tableStyles"]["colWidths"][0] = self.theme["tableStyles"]["colWidths"][0] - 0.1
+            if self.theme["tableStyles"]["colWidths"][1] < 6:
+                raise Exception("Too much content for the page.")
+            self.theme["tableStyles"]["colWidths"][1] = self.theme["tableStyles"]["colWidths"][1] + 0.1
+            self.styles = getSampleStyleSheet()
+            self.addstyles()
+            self.generate_resume(self.resume_json)
+        
+        
         if self.web:
             pdf = buffer.getvalue()
             buffer.close()
@@ -84,7 +120,7 @@ class Resume:
     def myPageWrapper(self, contact):
         # template for static, non-flowables, on the first page
         # draws all of the contact information at the top of the page
-        #myPage changes depending on the theme, The font also changes depending on theme, most of the setfonts evaluate to None
+        # myPage changes depending on the theme, The font also changes depending on theme, most of the setfonts evaluate to None
         def myPage(canvas, doc):
             canvas.saveState()  # save the current state
             canvas.setFont(self.theme["fonts"]["fontName"], self.theme["fonts"]["fontSize"])
@@ -420,7 +456,7 @@ class Resume:
          
     def generate_resume(self, resume_json):
         self.required_fields(resume_json)
-
+        self.resume_json = resume_json
         order = {}
         contact = {
             'name': resume_json["basics"]["name"],
