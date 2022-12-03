@@ -66,7 +66,7 @@ python run.py --help
 
 ---
 
-## addintional info for contributors
+## additional info for contributors
 
 studentresume stands on the backs of giants [ReportLab](https://docs.reportlab.com/reportlab/userguide), [Typer](https://typer.tiangolo.com/), [rich](https://docs.reportlab.com/reportlab/userguide), and [NerdFonts](https://www.nerdfonts.com/#home)
 
