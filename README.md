@@ -2,11 +2,11 @@
 
 ---
 
-## installation
+## Installation
 
-please first create a venv:
+Please first create a venv:
 
-for windows users
+For windows users:
 
 ```console
 python -m venv [VENV_NAME]
@@ -15,7 +15,7 @@ python -m venv [VENV_NAME]
 to activate:
 
 ```console
-venv\scripts\activate
+.\venv\scripts\activate
 ```
 
 ---
@@ -34,39 +34,42 @@ source venv/bin/activate
 
 ---
 
-after activating install requirements
-
-for users:
-
-```console
-python -m pip install -r requirements.txt
-```
-
-for devs/contributors:
-
-```console
-python -m pip install -r requirements-dev.txt
-```
-
----
-
-## usage
+## Usage
 
 ## To generate a resume
 
 ```console
-python run.py [OPTIONS] [RESUME_JSON] [THEME_JSON]
+studentresume [OPTIONS] [RESUME_JSON] [THEME_JSON]
 ```
 
-for a detailed help message and optional flags please use
+For a detailed help message and optional flags, please use:
 
 ```console
-python run.py --help
+studentresume --help
 ```
 
 ---
 
-## addintional info for contributors
+## Additional info for contributors
+
+Clone the repo:
+
+```console
+git clone git@github.com:open-uofa/studentresume.git
+```
+
+Navigate to the repo:
+
+```console
+cd studentresume
+```
+
+Install the package using [Poetry](https://python-poetry.org/) (preferred):
+
+```console
+poetry install
+```
+
 
 studentresume stands on the backs of giants [ReportLab](https://docs.reportlab.com/reportlab/userguide), [Typer](https://typer.tiangolo.com/), [rich](https://docs.reportlab.com/reportlab/userguide), and [NerdFonts](https://www.nerdfonts.com/#home)
 
