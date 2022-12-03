@@ -77,31 +77,34 @@ class Resume:
             story.append(contentTable2)
         else:
             story.append(contentTable)
+          
+        # story.append(contentTable)
             
-        # doc.build(
-        #     story,
-        #     onFirstPage=self.myPageWrapper(
-        #         contact),
+        doc.build(
+            story,
+            onFirstPage=self.myPageWrapper(
+                contact),
+            )
         
-        try:
-            doc.build(
-                story,
-                onFirstPage=self.myPageWrapper(
-                    contact),
-                )
-        except:
-            if self.theme["fonts"]["fontSize"] < 6:
-                raise Exception("Too much content for the page.")
-            self.theme["fonts"]["fontSize"] = self.theme["fonts"]["fontSize"] - 1
-            if self.theme["tableStyles"]["colWidths"][0] < 0.06:
-                raise Exception("Too much content for the page.")
-            self.theme["tableStyles"]["colWidths"][0] = self.theme["tableStyles"]["colWidths"][0] - 0.1
-            if self.theme["tableStyles"]["colWidths"][1] < 6:
-                raise Exception("Too much content for the page.")
-            self.theme["tableStyles"]["colWidths"][1] = self.theme["tableStyles"]["colWidths"][1] + 0.1
-            self.styles = getSampleStyleSheet()
-            self.addstyles()
-            self.generate_resume(self.resume_json)
+        # try:
+        #     doc.build(
+        #         story,
+        #         onFirstPage=self.myPageWrapper(
+        #             contact),
+        #         )
+        # except:
+        #     if self.theme["fonts"]["fontSize"] < 6:
+        #         raise Exception("Too much content for the page.")
+        #     self.theme["fonts"]["fontSize"] = self.theme["fonts"]["fontSize"] - 1
+            # if self.theme["tableStyles"]["colWidths"][0] < 0.06:
+            #     raise Exception("Too much content for the page.")
+            # self.theme["tableStyles"]["colWidths"][0] = self.theme["tableStyles"]["colWidths"][0] - 0.1
+            # if self.theme["tableStyles"]["colWidths"][1] < 6:
+            #     raise Exception("Too much content for the page.")
+            # self.theme["tableStyles"]["colWidths"][1] = self.theme["tableStyles"]["colWidths"][1] + 0.1
+            # self.styles = getSampleStyleSheet()
+            # self.addstyles()
+            # self.generate_resume(self.resume_json)
         
         
         if self.web:
