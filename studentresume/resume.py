@@ -94,7 +94,7 @@ class Resume:
                 onFirstPage=self.myPageWrapper(
                     contact),
                 )
-        except LayoutError:
+        except:
             if self.page == 1:
                 if self.theme["fonts"]["fontSize"] < 6:
                     raise Exception("Too much content for the page.")
@@ -109,7 +109,7 @@ class Resume:
                 self.addstyles()
                 self.generate_resume(self.resume_json)
             else: 
-                raise LayoutError("Too much content for the page.")
+                raise Exception("Error in doc.build")
         
         
         if self.web:
