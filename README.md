@@ -70,6 +70,10 @@ Install the package using [Poetry](https://python-poetry.org/) (preferred):
 poetry install
 ```
 
+If authenticated to publish to pypi
+```console
+poetry publish --build
+```
 
 studentresume stands on the backs of giants [ReportLab](https://docs.reportlab.com/reportlab/userguide), [Typer](https://typer.tiangolo.com/), [rich](https://docs.reportlab.com/reportlab/userguide), and [NerdFonts](https://www.nerdfonts.com/#home)
 
