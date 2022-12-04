@@ -464,7 +464,7 @@ class Resume:
         order = {}
         contact = {
             'name': resume_json["basics"]["name"],
-            'website': self.process_profiles(resume_json), #what assumtions do we want to make a but website? 
+            'website': self.process_profiles(resume_json) if 'profiles' in self.resume_json["basics"].keys() else self.resume_json["basics"]["url"], #what assumtions do we want to make a but website? 
             'email': resume_json["basics"]["email"],
             'phone': resume_json["basics"]["phone"]
             }
