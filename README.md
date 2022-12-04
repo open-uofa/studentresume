@@ -75,6 +75,8 @@ If authenticated to publish to pypi
 poetry publish --build
 ```
 
+---
+
 provided files:
 
 sample.resume.json - a sample resume.json
