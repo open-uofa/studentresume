@@ -94,7 +94,7 @@ class Resume:
                 onFirstPage=self.myPageWrapper(
                     contact),
                 )
-        except LayoutError:
+        except:
             if self.page == 1:
                 if self.theme["fonts"]["fontSize"] < 6:
                     raise Exception("Too much content for the page.")
