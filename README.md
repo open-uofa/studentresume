@@ -75,6 +75,19 @@ If authenticated to publish to pypi
 poetry publish --build
 ```
 
+provided files:
+
+sample.resume.json - a sample resume.json
+
+schema.json - the schema for resume.json files
+
+theme-schema.json - the schema for theme.json files
+
+../themes/* - location of default theme files
+
+requiredFields.json - required fields if required is true then field must exist with the listed fields being filled if required false if the field is present then the listed fields must be filled
+
+
 studentresume stands on the backs of giants [ReportLab](https://docs.reportlab.com/reportlab/userguide), [Typer](https://typer.tiangolo.com/), [rich](https://docs.reportlab.com/reportlab/userguide), and [NerdFonts](https://www.nerdfonts.com/#home)
 
 ## License
