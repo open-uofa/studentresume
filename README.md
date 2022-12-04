@@ -1,6 +1,5 @@
 # studentresume
 
----
 
 ## Installation
 
@@ -32,7 +31,6 @@ to activate:
 source venv/bin/activate
 ```
 
----
 
 ## Usage
 
@@ -47,8 +45,6 @@ For a detailed help message and optional flags, please use:
 ```console
 studentresume --help
 ```
-
----
 
 ## Additional info for contributors
 
@@ -94,7 +90,5 @@ requiredFields.json - required fields if required is true then field must exist 
 studentresume stands on the backs of giants [ReportLab](https://docs.reportlab.com/reportlab/userguide), [Typer](https://typer.tiangolo.com/), [rich](https://docs.reportlab.com/reportlab/userguide), and [NerdFonts](https://www.nerdfonts.com/#home)
 
 ## License
-
----
 
 This project is licenced under the terms of the MIT license
