@@ -87,7 +87,7 @@ requiredFields.json - required fields if required is true then field must exist 
 
 ---
 
-studentresume stands on the backs of giants [ReportLab](https://docs.reportlab.com/reportlab/userguide), [Typer](https://typer.tiangolo.com/), [rich](https://docs.reportlab.com/reportlab/userguide), and [NerdFonts](https://www.nerdfonts.com/#home)
+studentresume stands on the backs of giants [ReportLab](https://docs.reportlab.com/reportlab/userguide), [Typer](https://typer.tiangolo.com/), [rich](https://docs.reportlab.com/reportlab/userguide), [JSON Resume](https://github.com/jsonresume), and [NerdFonts](https://www.nerdfonts.com/#home)
 
 ## License
 
